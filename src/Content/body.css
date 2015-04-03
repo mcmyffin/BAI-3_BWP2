@@ -1,5 +1,6 @@
 @charset "ISO-8859-1";
 
+/***home***/
 div.bodyContainer{
     background-color: #ffffff;
     position:relative;
@@ -15,6 +16,7 @@ body.basic{
     background-color: rgba(213, 215, 210, 0.100);
 }
 
+/**login**/
 div.loginBox{
     position: relative;
     top: 40px;
@@ -24,6 +26,7 @@ div.loginBox{
     margin-left: -200px;
 }
 
+/**product**/
 div.product {
     background-color: rgba(246, 244, 244, 0.89);
 }
@@ -85,3 +88,4 @@ div.productPreis {
     background-color: transparent;
 
 }
+
