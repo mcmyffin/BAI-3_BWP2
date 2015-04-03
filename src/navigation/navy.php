@@ -11,7 +11,7 @@
                 $warenkorb= "warenkorb";
                 $login    = "login";
 
-                if($page == $home OR $page == ""){
+                if($page == "" OR $page == $home){
 
                     include "home_1.html";
                     include "produkte_0.html";
