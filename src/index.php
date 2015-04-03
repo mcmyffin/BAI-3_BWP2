@@ -12,7 +12,7 @@
         <?php
 
             include "navigation/navy.php";
-            include "Content/home.html";
+            include "Content/body.php";
 
         ?>
 

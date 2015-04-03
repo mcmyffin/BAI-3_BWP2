@@ -1,69 +1,68 @@
-<html>
-    <body>
-        <div class="navyContainer">
-            <div class="navbar navbar-default navbar-fixed-top navyContentContainer">
-                <ul class="nav nav-pills">
-                    <?php
-                        $page = $_GET["page"];
-                        $home = "home";
-                        $produkte = "produkte";
-                        $aktionen = "aktionen";
-                        $warenkorb= "warenkorb";
-                        $login    = "login";
 
-                        if($page == $home OR $page == ""){
+<div class="navyContainer">
+    <div class="navbar navbar-default navbar-fixed-top navyContentContainer">
+        <ul class="nav nav-pills">
 
-                            include "home_1.html";
-                            include "produkte_0.html";
-                            include "aktionen_0.html";
-                            include "warenkorb_0.html";
-                            include "login_0.html";
+            <?php
+                $page = $_GET["page"];
+                $home = "home";
+                $produkte = "produkte";
+                $aktionen = "aktionen";
+                $warenkorb= "warenkorb";
+                $login    = "login";
 
-                        }elseif($page == $produkte){
+                if($page == $home OR $page == ""){
 
-                            include "home_0.html";
-                            include "produkte_1.html";
-                            include "aktionen_0.html";
-                            include "warenkorb_0.html";
-                            include "login_0.html";
+                    include "home_1.html";
+                    include "produkte_0.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_0.html";
+                    include "login_0.html";
 
-                        }elseif($page == $aktionen){
+                }elseif($page == $produkte){
 
-                            include "home_0.html";
-                            include "produkte_0.html";
-                            include "aktionen_1.html";
-                            include "warenkorb_0.html";
-                            include "login_0.html";
+                    include "home_0.html";
+                    include "produkte_1.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_0.html";
+                    include "login_0.html";
 
-                        }elseif($page == $warenkorb){
+                }elseif($page == $aktionen){
 
-                            include "home_0.html";
-                            include "produkte_0.html";
-                            include "aktionen_0.html";
-                            include "warenkorb_1.html";
-                            include "login_0.html";
+                    include "home_0.html";
+                    include "produkte_0.html";
+                    include "aktionen_1.html";
+                    include "warenkorb_0.html";
+                    include "login_0.html";
 
-                        }elseif($page = $login) {
+                }elseif($page == $warenkorb){
 
-                            include "home_0.html";
-                            include "produkte_0.html";
-                            include "aktionen_0.html";
-                            include "warenkorb_0.html";
-                            include "login_1.html";
+                    include "home_0.html";
+                    include "produkte_0.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_1.html";
+                    include "login_0.html";
 
-                        }else{
+                }elseif($page = $login) {
 
-                            include "home_1.html";
-                            include "produkte_0.html";
-                            include "aktionen_0.html";
-                            include "warenkorb_0.html";
-                            include "login_0.html";
-                        }
+                    include "home_0.html";
+                    include "produkte_0.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_0.html";
+                    include "login_1.html";
 
-                    ?>
-                </ul>
-            </div>
-        </div>
-    </body>
-</html>
+                }else{
+
+                    include "home_1.html";
+                    include "produkte_0.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_0.html";
+                    include "login_0.html";
+                }
+
+            ?>
+        </ul>
+    </div>
+</div>
+
 
