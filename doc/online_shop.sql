@@ -3,11 +3,13 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 07. Apr 2015 um 13:59
+-- Erstellungszeit: 08. Apr 2015 um 11:47
 -- Server Version: 5.6.21
 -- PHP-Version: 5.6.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `online_shop`
 --
+CREATE DATABASE IF NOT EXISTS `online_shop` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `online_shop`;
 
 -- --------------------------------------------------------
 
@@ -26,11 +30,20 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `auftrag`
 --
 
+DROP TABLE IF EXISTS `auftrag`;
 CREATE TABLE IF NOT EXISTS `auftrag` (
 `AuftragNr` int(4) NOT NULL,
   `UserID` int(4) NOT NULL,
   `BestellID` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- RELATIONEN DER TABELLE `auftrag`:
+--   `BestellID`
+--       `bestellung` -> `BestellID`
+--   `UserID`
+--       `user` -> `UserID`
+--
 
 -- --------------------------------------------------------
 
@@ -38,11 +51,20 @@ CREATE TABLE IF NOT EXISTS `auftrag` (
 -- Tabellenstruktur für Tabelle `besteht_aus`
 --
 
+DROP TABLE IF EXISTS `besteht_aus`;
 CREATE TABLE IF NOT EXISTS `besteht_aus` (
   `BestellID` int(4) NOT NULL,
   `ProduktID` int(4) NOT NULL,
   `Menge` varchar(3) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- RELATIONEN DER TABELLE `besteht_aus`:
+--   `BestellID`
+--       `bestellung` -> `BestellID`
+--   `ProduktID`
+--       `produkt` -> `ProduktID`
+--
 
 -- --------------------------------------------------------
 
@@ -50,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `besteht_aus` (
 -- Tabellenstruktur für Tabelle `bestellung`
 --
 
+DROP TABLE IF EXISTS `bestellung`;
 CREATE TABLE IF NOT EXISTS `bestellung` (
 `BestellID` int(4) NOT NULL,
   `Datum` date NOT NULL
@@ -61,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `bestellung` (
 -- Tabellenstruktur für Tabelle `produkt`
 --
 
+DROP TABLE IF EXISTS `produkt`;
 CREATE TABLE IF NOT EXISTS `produkt` (
 `ProduktID` int(4) NOT NULL,
   `Bezeichnung` text COLLATE utf8_bin NOT NULL,
@@ -75,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `produkt` (
 -- Tabellenstruktur für Tabelle `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
 `UserID` int(4) NOT NULL,
   `Vorname` text COLLATE utf8_bin NOT NULL,
@@ -152,8 +177,6 @@ MODIFY `UserID` int(4) NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `auftrag`
 ADD CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
-ADD CONSTRAINT `BestellID` FOREIGN KEY (`BestellID`) REFERENCES `user` (`BestellID`);
-
 
 --
 -- Constraints der Tabelle `besteht_aus`
@@ -161,6 +184,7 @@ ADD CONSTRAINT `BestellID` FOREIGN KEY (`BestellID`) REFERENCES `user` (`Bestell
 ALTER TABLE `besteht_aus`
 ADD CONSTRAINT `BestellID` FOREIGN KEY (`BestellID`) REFERENCES `bestellung` (`BestellID`),
 ADD CONSTRAINT `ProduktID` FOREIGN KEY (`ProduktID`) REFERENCES `produkt` (`ProduktID`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
