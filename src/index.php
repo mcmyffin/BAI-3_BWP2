@@ -12,6 +12,7 @@
 
         <?php
 
+            include "connection.php";
             include "navigation/navy.php";
             include "Content/body.php";
 
