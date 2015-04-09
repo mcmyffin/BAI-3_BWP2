@@ -12,7 +12,7 @@
         include "home.html";
     }elseif($page == $produkte){
 
-        include "product.html";
+        include "product.php";
 
     }elseif($page == $aktionen){
 
