@@ -5,10 +5,11 @@
 
 <div class="container bodyContainer">
     <div class="productSuche">
-        <form action="" class="productSuche">
-            <p>Geben Sie einen Suchbegriff ein:
-                <input type="text" name="SuchNach">
-                <input type="button" value="suchen" onclick="find(this.form.SuchNach.value, false, false)">
+
+        <form action="../index.php?page=suche" method="post">
+            Geben Sie einen Suchbegriff ein:
+            <input name="name" type="text" maxlength="255" size="20" />
+            <input type="submit" value="suchen" />
         </form>
     </div>
 

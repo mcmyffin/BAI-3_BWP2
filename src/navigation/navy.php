@@ -10,6 +10,7 @@
                 $aktionen = "aktionen";
                 $warenkorb= "warenkorb";
                 $login    = "login";
+                $suche    = "suche";
 
                 if($page == "" OR $page == $home){
 
@@ -26,6 +27,16 @@
                     include "aktionen_0.html";
                     include "warenkorb_0.html";
                     include "login_0.html";
+
+
+                }elseif($page == $suche){
+
+                    include "home_0.html";
+                    include "suche_1.html";
+                    include "aktionen_0.html";
+                    include "warenkorb_0.html";
+                    include "login_0.html";
+
 
                 }elseif($page == $aktionen){
 
