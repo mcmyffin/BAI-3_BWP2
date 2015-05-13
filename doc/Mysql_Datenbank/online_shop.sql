@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.4.3
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Erstellungszeit: 08. Apr 2015 um 11:47
--- Server Version: 5.6.21
--- PHP-Version: 5.6.3
+-- Host: localhost
+-- Erstellungszeit: 13. Mai 2015 um 10:47
+-- Server-Version: 5.5.43-0ubuntu0.14.04.1
+-- PHP-Version: 5.5.9-1ubuntu4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -21,170 +19,180 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `online_shop`
 --
-CREATE DATABASE IF NOT EXISTS `online_shop` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `online_shop`;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `auftrag`
+-- Tabellenstruktur für Tabelle `Artikel`
 --
 
-DROP TABLE IF EXISTS `auftrag`;
-CREATE TABLE IF NOT EXISTS `auftrag` (
-`AuftragNr` int(4) NOT NULL,
-  `UserID` int(4) NOT NULL,
-  `BestellID` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- RELATIONEN DER TABELLE `auftrag`:
---   `BestellID`
---       `bestellung` -> `BestellID`
---   `UserID`
---       `user` -> `UserID`
---
+CREATE TABLE IF NOT EXISTS `Artikel` (
+  `ART_ID` int(11) NOT NULL,
+  `ART_Bezeichnung` text CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL,
+  `ART_Beschreibung` text CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL,
+  `ART_Kategorie` text CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL,
+  `ART_Typ` int(2) NOT NULL,
+  `ART_BildURL` text CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL,
+  `ART_Bestand` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `besteht_aus`
+-- Tabellenstruktur für Tabelle `Auftrag`
 --
 
-DROP TABLE IF EXISTS `besteht_aus`;
-CREATE TABLE IF NOT EXISTS `besteht_aus` (
-  `BestellID` int(4) NOT NULL,
-  `ProduktID` int(4) NOT NULL,
-  `Menge` varchar(3) COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- RELATIONEN DER TABELLE `besteht_aus`:
---   `BestellID`
---       `bestellung` -> `BestellID`
---   `ProduktID`
---       `produkt` -> `ProduktID`
---
+CREATE TABLE IF NOT EXISTS `Auftrag` (
+  `A_ID` int(11) NOT NULL,
+  `A_UserID` int(11) NOT NULL,
+  `A_BestellID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `bestellung`
+-- Tabellenstruktur für Tabelle `Bestellliste`
 --
 
-DROP TABLE IF EXISTS `bestellung`;
-CREATE TABLE IF NOT EXISTS `bestellung` (
-`BestellID` int(4) NOT NULL,
-  `Datum` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE IF NOT EXISTS `Bestellliste` (
+  `BEST_BestellID` int(11) NOT NULL,
+  `BEST_ArtikelID` int(11) NOT NULL,
+  `BEST_Menge` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `produkt`
+-- Tabellenstruktur für Tabelle `Bestellung`
 --
 
-DROP TABLE IF EXISTS `produkt`;
-CREATE TABLE IF NOT EXISTS `produkt` (
-`ProduktID` int(4) NOT NULL,
-  `Bezeichnung` text COLLATE utf8_bin NOT NULL,
-  `Kategorie` text COLLATE utf8_bin NOT NULL,
-  `Artikebestand` varchar(3) COLLATE utf8_bin NOT NULL,
-  `Dateipfad` text COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE IF NOT EXISTS `Bestellung` (
+  `B_ID` int(11) NOT NULL,
+  `B_Datum` text NOT NULL,
+  `B_Status` int(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `user`
+-- Tabellenstruktur für Tabelle `Unterprodukt`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-`UserID` int(4) NOT NULL,
-  `Vorname` text COLLATE utf8_bin NOT NULL,
-  `Nachname` text COLLATE utf8_bin NOT NULL,
-  `UserTyp` text COLLATE utf8_bin NOT NULL,
-  `Ort` varchar(20) COLLATE utf8_bin NOT NULL,
-  `PLZ` varchar(5) COLLATE utf8_bin NOT NULL,
-  `Strasse` text COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE IF NOT EXISTS `Unterprodukt` (
+  `UPR_OberArtID` int(11) NOT NULL,
+  `UPR_UnterArtID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `User`
+--
+
+CREATE TABLE IF NOT EXISTS `User` (
+  `U_ID` int(11) NOT NULL,
+  `U_Vorname` text NOT NULL,
+  `U_Nachname` text NOT NULL,
+  `U_GebDatum` date NOT NULL,
+  `U_Ort` text NOT NULL,
+  `U_PLZ` int(10) NOT NULL,
+  `U_Strasse` text NOT NULL,
+  `U_Hausnummer` int(5) NOT NULL,
+  `U_Adresszusatz` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indizes der exportierten Tabellen
 --
 
 --
--- Indizes für die Tabelle `auftrag`
+-- Indizes für die Tabelle `Artikel`
 --
-ALTER TABLE `auftrag`
- ADD PRIMARY KEY (`AuftragNr`), ADD UNIQUE KEY `User_ID` (`UserID`) COMMENT 'user', ADD UNIQUE KEY `Bestell_ID` (`BestellID`) COMMENT 'Bestell';
+ALTER TABLE `Artikel`
+  ADD PRIMARY KEY (`ART_ID`);
 
 --
--- Indizes für die Tabelle `besteht_aus`
+-- Indizes für die Tabelle `Auftrag`
 --
-ALTER TABLE `besteht_aus`
- ADD PRIMARY KEY (`BestellID`,`ProduktID`), ADD KEY `ProduktID` (`ProduktID`);
+ALTER TABLE `Auftrag`
+  ADD PRIMARY KEY (`A_ID`),
+  ADD KEY `A_UserID` (`A_UserID`),
+  ADD KEY `A_BestellID` (`A_BestellID`);
 
 --
--- Indizes für die Tabelle `bestellung`
+-- Indizes für die Tabelle `Bestellliste`
 --
-ALTER TABLE `bestellung`
- ADD PRIMARY KEY (`BestellID`);
+ALTER TABLE `Bestellliste`
+  ADD KEY `BEST_BestellID` (`BEST_BestellID`),
+  ADD KEY `BEST_ArtikelID` (`BEST_ArtikelID`);
 
 --
--- Indizes für die Tabelle `produkt`
+-- Indizes für die Tabelle `Bestellung`
 --
-ALTER TABLE `produkt`
- ADD PRIMARY KEY (`ProduktID`);
+ALTER TABLE `Bestellung`
+  ADD PRIMARY KEY (`B_ID`);
 
 --
--- Indizes für die Tabelle `user`
+-- Indizes für die Tabelle `Unterprodukt`
 --
-ALTER TABLE `user`
- ADD PRIMARY KEY (`UserID`);
+ALTER TABLE `Unterprodukt`
+  ADD UNIQUE KEY `UPR_UnterArtID` (`UPR_UnterArtID`),
+  ADD KEY `UPR_OberArtID` (`UPR_OberArtID`);
+
+--
+-- Indizes für die Tabelle `User`
+--
+ALTER TABLE `User`
+  ADD PRIMARY KEY (`U_ID`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT für Tabelle `auftrag`
+-- AUTO_INCREMENT für Tabelle `Artikel`
 --
-ALTER TABLE `auftrag`
-MODIFY `AuftragNr` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `Artikel`
+  MODIFY `ART_ID` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT für Tabelle `bestellung`
+-- AUTO_INCREMENT für Tabelle `Auftrag`
 --
-ALTER TABLE `bestellung`
-MODIFY `BestellID` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `Auftrag`
+  MODIFY `A_ID` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT für Tabelle `produkt`
+-- AUTO_INCREMENT für Tabelle `Bestellung`
 --
-ALTER TABLE `produkt`
-MODIFY `ProduktID` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `Bestellung`
+  MODIFY `B_ID` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT für Tabelle `user`
+-- AUTO_INCREMENT für Tabelle `User`
 --
-ALTER TABLE `user`
-MODIFY `UserID` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `User`
+  MODIFY `U_ID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints der exportierten Tabellen
 --
 
 --
--- Constraints der Tabelle `auftrag`
+-- Constraints der Tabelle `Auftrag`
 --
-ALTER TABLE `auftrag`
-ADD CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
+ALTER TABLE `Auftrag`
+  ADD CONSTRAINT `Auftrag_ibfk_2` FOREIGN KEY (`A_BestellID`) REFERENCES `Bestellung` (`B_ID`),
+  ADD CONSTRAINT `Auftrag_ibfk_1` FOREIGN KEY (`A_UserID`) REFERENCES `User` (`U_ID`);
 
 --
--- Constraints der Tabelle `besteht_aus`
+-- Constraints der Tabelle `Bestellliste`
 --
-ALTER TABLE `besteht_aus`
-ADD CONSTRAINT `BestellID` FOREIGN KEY (`BestellID`) REFERENCES `bestellung` (`BestellID`),
-ADD CONSTRAINT `ProduktID` FOREIGN KEY (`ProduktID`) REFERENCES `produkt` (`ProduktID`);
-COMMIT;
+ALTER TABLE `Bestellliste`
+  ADD CONSTRAINT `Bestellliste_ibfk_2` FOREIGN KEY (`BEST_ArtikelID`) REFERENCES `Artikel` (`ART_ID`),
+  ADD CONSTRAINT `Bestellliste_ibfk_1` FOREIGN KEY (`BEST_BestellID`) REFERENCES `Bestellung` (`B_ID`);
+
+--
+-- Constraints der Tabelle `Unterprodukt`
+--
+ALTER TABLE `Unterprodukt`
+  ADD CONSTRAINT `Unterprodukt_ibfk_2` FOREIGN KEY (`UPR_UnterArtID`) REFERENCES `Artikel` (`ART_ID`),
+  ADD CONSTRAINT `Unterprodukt_ibfk_1` FOREIGN KEY (`UPR_OberArtID`) REFERENCES `Artikel` (`ART_ID`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
