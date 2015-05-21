@@ -21,7 +21,9 @@ public class Produkte extends Controller {
         DynamicForm suche = Form.form().bindFromRequest();
         String begriff = suche.get("suchbegriff");
 
+
         IProduktKomponente produktKomponente = new ProduktKomponente();
+        if(begriff.isEmpty() || begriff == null) return ok(produkte.render(produktKomponente.getArtikel()));
         return ok(produkte.render(produktKomponente.sucheArtikelNachBegriff(begriff)));
     }
 }

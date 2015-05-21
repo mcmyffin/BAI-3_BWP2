@@ -1,6 +1,6 @@
 package models.ProduktKomponente;
 
-import javafx.util.Pair;
+
 import models.DatenbankAdapter.DatenbankAdapter;
 import models.DatenbankAdapter.IDBArtikel;
 
@@ -70,7 +70,15 @@ public class ProduktKomponente implements IProduktKomponente{
         int bestand = Integer.parseInt(artikel.get(6));
         int preis = Integer.parseInt(artikel.get(7));
 
-        return new Artikel(artID,bezeichnung,beschreibung,kategorie,typ,bildURL,bestand,preis);
+        IArtikel einArtikel = new Artikel(artID,bezeichnung,beschreibung,kategorie,typ,bildURL,bestand,preis);
+        System.out.println("Artikel : "+einArtikel.getBezeichnung()+" mit LVL "+einArtikel.getTyp());
+        System.out.println("hat den bestand: "+einArtikel.getBestand());
+        if(einArtikel.getTyp().getValue() != (ArtikelTyp.LEVEL_0.getValue())){
+            System.out.println("->Artikel : " + einArtikel.getBezeichnung() + " geht in die bereichnung");
+            einArtikel.setBestand(calculateBestand(einArtikel));
+            System.out.println("Artikel : " + einArtikel.getBezeichnung()+" hat jetzt den bestand: "+einArtikel.getBestand());
+        }
+        return einArtikel;
     }
 
     private List<Pair<Integer,Integer>> getUnterArtikel(IArtikel artikel){
@@ -88,10 +96,24 @@ public class ProduktKomponente implements IProduktKomponente{
     private int calculateBestand(IArtikel artikel){
 
         int bestand = artikel.getBestand();
-        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return bestand;
+
+        for(Pair<Integer,Integer> unterartikelIDPaar : getUnterArtikel(artikel)){
+
+            IArtikel unterartikel = sucheArtikelNachArtikelID(unterartikelIDPaar.getKey());
+            if(unterartikel.getTyp().equals(ArtikelTyp.LEVEL_0)){
+                System.out.println("UNTERARTIKEL: "+unterartikel.getBezeichnung()+" | bestand = "+unterartikel.getBestand()+" /  menge = "+unterartikelIDPaar.getValue() +" = ");
+
+                if(unterartikel.getBestand() > 0){
+                    return (unterartikel.getBestand())/unterartikelIDPaar.getValue();
+                }else return 0;
 
 
-
+            } else {
+                System.out.println("min("+calculateBestand(unterartikel) +" , "+ bestand+")");
+                return Math.min(calculateBestand(unterartikel), bestand);
+            }
+        }
+        System.out.println(artikel.getBezeichnung()+" hat keine unterartikel");
         return bestand;
     }
 

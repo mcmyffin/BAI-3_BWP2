@@ -68,4 +68,5 @@ public interface IArtikel {
     public int getPreis();
 
 
+    public void setBestand(int bestand);
 }

@@ -7,7 +7,7 @@ div.bodyContainer{
     top:0px;
     left: 50%;
     width:700px;
-    height:100%;
+    height:auto;
     margin-left: -350px;
     z-index: 1;
 }

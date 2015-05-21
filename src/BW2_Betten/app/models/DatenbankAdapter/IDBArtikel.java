@@ -1,6 +1,7 @@
 package models.DatenbankAdapter;
 
-import javafx.util.Pair;
+
+import models.ProduktKomponente.Pair;
 
 import java.sql.SQLException;
 import java.util.List;

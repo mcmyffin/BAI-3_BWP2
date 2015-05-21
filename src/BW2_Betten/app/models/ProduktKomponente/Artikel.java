@@ -67,4 +67,9 @@ public class Artikel implements IArtikel {
     public int getPreis() {
         return this.preis;
     }
+
+    @Override
+    public void setBestand(int bestand) {
+        this.bestand = bestand;
+    }
 }
