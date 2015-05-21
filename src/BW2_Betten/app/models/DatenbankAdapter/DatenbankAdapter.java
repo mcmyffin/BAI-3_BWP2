@@ -1,7 +1,7 @@
 package models.DatenbankAdapter;
 
-import javafx.util.Pair;
 import models.DatenbankAdapter.Exception.ServerDown;
+import models.ProduktKomponente.Pair;
 import play.db.DB;
 
 import java.sql.Connection;

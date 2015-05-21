@@ -44,7 +44,7 @@ public class Warenkorb extends Controller {
 
     public static WarenkorbDTO getWarenkorb(){
 
-        WarenkorbDTO warenkorbDTO = new WarenkorbDTO();
+        WarenkorbDTO warenkorbDTO = null;
         IProduktKomponente produktKomponente = new ProduktKomponente();
 
         for(String key : session().keySet()){
@@ -58,6 +58,7 @@ public class Warenkorb extends Controller {
             IArtikel art = produktKomponente.sucheArtikelNachArtikelID(artikelNummer);
 
             try {
+                if(warenkorbDTO == null) warenkorbDTO = new WarenkorbDTO();
                 warenkorbDTO.addArtikelDTO(new ArtikelDTO(art),menge);
             } catch (ArtikelDTO_ParseException e) {
 
