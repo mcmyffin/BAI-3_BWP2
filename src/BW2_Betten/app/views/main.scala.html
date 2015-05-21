@@ -1,0 +1,47 @@
+@(content: Html)
+
+<html>
+    <head>
+        <title>Bequeme-Betten-Online</title>
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/navigation/navyBar.css")" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/body/body.css")" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css">
+
+    </head>
+    <body class="basic">
+        <!-- Navibar-->
+        <div class="navyContainer">
+            <div class="titelPic">
+                <img src="@routes.Assets.at("images/Betten/Titelbild_2.jpg")" style="position:relative; width:700px; height:100px">
+            </div>
+            <div class="navbar navbar-default navbar-fixed-top navyBar">
+                <ul class="nav nav-pills">
+                    <li role="presentation">
+                        <a href="/" style="color: #000000"><b>Home</b></a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/produkte" style="color: #000000"><b>Produkte</b></a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/angebote" style="color: #000000"><b>Angebote</b></a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/warenkorb" style="color: #000000"><b>Warenkorb</b></a>
+                    </li>
+                    <!-- Hier ein bisschen mehr -->
+                    <li role="presentation">
+                        <a href="/account" style="color: #000000"><b>Mein Account</b></a>
+                    </li>
+                    <!---------------------------->
+
+                </ul>
+            </div>
+        </div>
+        <!------------>
+        <!-- Body ---->
+        <div class="container bodyContainer">
+            @content
+        </div>
+        <!------------>
+    </body>
+</html>

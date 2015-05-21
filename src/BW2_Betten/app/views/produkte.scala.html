@@ -1,0 +1,54 @@
+@(suchErgebnis: java.util.List[models.ProduktKomponente.IArtikel])
+@import play.api.Play
+
+@main{
+
+    <div class="productSuche">
+        <form action="/produkte" method="post" class="productSuche">
+                <input type="text" name="suchbegriff">
+                <button type="submit">suchen</button>
+        </form>
+    </div>
+
+
+
+    @if(suchErgebnis != null){
+        @for(artikel <- suchErgebnis){
+            <div class="jumbotron productContainer">
+                <div class="productPicPos">
+                    <img alt="Artikel" src="@routes.Assets.at(artikel.getBildURL)" class="img-thumbnail productPic">
+                    <div class="img-thumbnail productBestand">
+                    @if(artikel.getBestand > 0) {
+                        <center style="color: green">Lieferbar</center>
+                    }else{
+                        <center style="color: red">nicht lieferbar</center>
+                    }
+                    </div>
+                </div>
+
+                <div class="productInfo img-thumbnail">
+                    <b>@artikel.getBezeichnung</b><br>
+                    @Html(artikel.getBeschreibung)
+                </div>
+
+                <form action="/produkte/add" method="post">
+                    <div class="productHinzufuegenUndPreis">
+                        <div class="img-thumbnail productPreis">
+                            <center><b>@artikel.getPreis &euro;</b></center>
+                        </div>
+                        @if(artikel.getBestand > 0){
+                            <button type="submit" class="glyphicon glyphicon-plus pruductHinzufuegen"  name="artikelNummer" value="@artikel.getArtikelID"></button>
+                        }else{
+                            <button type="button" class="glyphicon glyphicon-plus pruductHinzufuegen"  name="artikelNummer" disabled></button>
+                        }
+
+                    </div>
+                </form>
+            </div>
+        }
+
+    }
+
+
+
+}

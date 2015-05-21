@@ -1,0 +1,32 @@
+@charset "ISO-8859-1";
+
+div.navyContainer {
+    position: relative;
+    top:0px;
+    left: 0px;
+    width: 100%;
+    height: 151px;
+    background-color: transparent;
+    z-index: 100;
+}
+
+div.navyBar {
+    position: relative;
+    background-color: #aea6ff;
+    left: 50%;
+    width: 700px;
+    height: 51px;
+    margin-left: -350px;
+    z-index: 101;
+}
+div.titelPic{
+    position: relative;
+    background-color: #269abc;
+    top: 1px;
+    left: 50%;
+    width: 700px;
+    height: 100px;
+    margin-left: -350px;
+    z-index: 101;
+}
+

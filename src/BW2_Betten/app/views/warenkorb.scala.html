@@ -1,0 +1,49 @@
+@(warenkorb: models.WarenkorbKomponente.WarenkorbDTO)
+@import models.ProduktKomponente;
+@main{
+
+    @if(warenkorb != null){
+
+        <div class="jumbotron warenkorbContainer">
+
+
+        @for(artikelDTO <- warenkorb.getWarenkorb.keySet()){
+
+            <div class="warenkorbUebersicht img-thumbnail">
+                <b>@artikelDTO.getBezeichnung</b><br>
+                <i>Art Nr.: @artikelDTO.getArtID</i>
+
+                <form action="/warenkorb" method="post">
+                    <button name="delete" value="@artikelDTO.getArtID" type="submit" class="glyphicon glyphicon-trash warenkorbDelArtikel"></button>
+                </form>
+
+                <form action="/warenkorb" method="post">
+                    <input name="menge" type="number" class="warenkorbMenge" value="@warenkorb.getWarenkorb.get(artikelDTO)">
+                    <input name="artikelID" type="hidden" value="@artikelDTO.getArtID">
+                </form>
+                <div class="img-thumbnail warenkorbPreis">
+                    <center><b> @artikelDTO.getPreis &euro; </b></center>
+                </div>
+
+            </div>
+        }
+
+        </div>
+        <!----------------------------------------->
+        <b>Gesamt Preis ink. Mwst betr&auml;gt: </b>
+        <div class="warenkorbGesamtPreis img-thumbnail">
+            <center><b> @warenkorb.calculatePreis() &euro;</b></center>
+        </div>
+        <div class="warenkorbKasse">
+            <button type="button" class="btn btn-primary btn-sm" >zur Kasse</button>
+        </div>
+
+    }else{
+
+        <div class="jumbotron warenkorbContainer">
+            <center><p style="color:#ff0000">Warenkorb ist leer</p></center>
+        </div>
+
+    }
+
+}
