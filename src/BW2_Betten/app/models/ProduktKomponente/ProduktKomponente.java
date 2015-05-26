@@ -110,7 +110,7 @@ public class ProduktKomponente implements IProduktKomponente{
 
             } else {
                 System.out.println("min("+calculateBestand(unterartikel) +" , "+ bestand+")");
-                return Math.min(calculateBestand(unterartikel), bestand);
+                return Math.min(calculateBestand(unterartikel), Integer.MAX_VALUE);
             }
         }
         System.out.println(artikel.getBezeichnung()+" hat keine unterartikel");

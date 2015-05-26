@@ -2,6 +2,8 @@ package models.DatenbankAdapter;
 
 import models.DatenbankAdapter.Exception.ServerDown;
 
+import java.util.List;
+
 /**
  * Created by dima on 20.05.15.
  */
@@ -13,16 +15,20 @@ public interface IDBKunde {
      * @param email
      * @param passwort
      * @return true, wenn indetifizierung erfolgreich war
-     * @throws ServerDown
      */
-    public boolean anmelden(String email, String passwort) throws ServerDown;
+    public List<String> anmelden(String email, String passwort);
 
 
+    public List<String> getKundenDaten(int kID, String email, String vn, String nn);
     /**
      * Get Kunden ID by Email
      * Versucht die Kundennummer der zugehoerigen Email zu finden
      * @param email
-     * @return kundenID > 0 Wenn gefunden, sonst 0
+     * @return int
+     *  Legende:
+     *      int > 0 := KundenID
+     *      int = 0 := Kunde nicht gefunden
+     *      int < 0 := Datenbank-Problem,
      */
     public int getKundenIDByEmail(String email);
 
@@ -35,6 +41,7 @@ public interface IDBKunde {
      * @param nachname
      * @param gebD
      * @param ort
+     * @param plz
      * @param str
      * @param hn
      * @param adzs
@@ -42,5 +49,24 @@ public interface IDBKunde {
      * @return true, wenn Registration erfolgreich war
      */
     public boolean registrieren(String email, String passwort, String vn, String nachname, String gebD,
-                                                               int ort, String str, int hn, String adzs);
+                                                               String ort, int plz, String str, int hn, String adzs);
+
+    /**
+     * Change Profil
+     * Speichert die Aenderungen des Profils mittels der KundenID
+     * Wenn KundenID ungueltig oder Datenbank unerreichbar, dann false.
+     * @param kID
+     * @param email
+     * @param vn
+     * @param nn
+     * @param gebD
+     * @param ort
+     * @param plz
+     * @param str
+     * @param hn
+     * @param adzs
+     * @return wenn erfolgreich gespeichert, dann true.
+     */
+    public boolean changeProfil(int kID, String email, String vn, String nn,String gebD, String ort, int plz, String str,
+                                                                int hn, String adzs);
 }

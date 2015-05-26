@@ -10,10 +10,12 @@ public interface IKundenVerwaltungKomponente {
      * Versucht User anzumelden
      * @param email
      * @param passwort
-     * @return Wenn erfolgreich, dann true.
+     * @return IKunde Objekt wenn anmelden erfolgreich, sont null
      */
-    public boolean anmelden(String email, String passwort);
+    public IKunde anmelden(String email, String passwort);
 
+
+    public KundeDTO getKundenDaten(KundeSessionDTO sessionDTO);
 
     /**
      * Registrieren
@@ -30,6 +32,8 @@ public interface IKundenVerwaltungKomponente {
      * @param hn
      * @param adzs
      *
+     * Passwort muss mindestens laenge 6 haben
+     *
      * Rueckgabewert Legede:
      *      -1 := zurzeit nicht moeglich
      *       0 := erfolgreich registriert
@@ -39,5 +43,13 @@ public interface IKundenVerwaltungKomponente {
      *
      * @return int-Meldung
      */
-     public int registrieren(String email, String passwort, String vn, String nachname, String gebD, int ort, String str, int hn, String adzs);
+     public int registrieren(String email, String passwort, String vn, String nachname, String gebD, String ort,int plz, String str, int hn, String adzs);
+
+    /**
+     * Change Profil
+     * Wenn gueltige Aenderungen im DTO eingetragen, werden diese gespeichert.
+     * @param kundeDTO
+     * @return true wenn erfolgreich gespeichert
+     */
+    public boolean changeProfil(KundeDTO kundeDTO);
 }
