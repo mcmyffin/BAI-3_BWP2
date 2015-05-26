@@ -1,0 +1,37 @@
+@(message: String)
+
+@main{
+
+  @if(message != null){
+    <center>@Html(message)</center>
+  }else{
+    <center>Bitte f&uuml;llen Sie alle mit * markierte Filder aus</center>
+  }
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Registration
+    </div>
+    <div class="panel-body">
+      <div class="input-group input-group-sm">
+        <form action="@routes.Account.doRegistrieren()" method="post">
+            <input name="email" type="email" class="form-control" placeholder="Email*">
+            <input id="pw1" name="passwort1" type="password" class="form-control" placeholder="Passwort*">
+            <input id="pw2" name="passwort2" type="password" class="form-control" placeholder="Passwort*">
+            <input name="vorname" type="text" class="form-control" placeholder="Vorname*">
+            <input name="nachname" type="text" class="form-control" placeholder="Nachname*">
+            <input name="gebDatum" type="date" class="form-control" placeholder="Geburtsdatum TT.MM.JJJJ*">
+            <input name="ort" type="text" class="form-control" placeholder="Ort*">
+            <input name="plz" type="number" class="form-control" placeholder="PLZ*">
+            <input name="strasse" type="text" class="form-control" placeholder="Strasse*">
+            <input name="hn" type="number" class="form-control" placeholder="Hausnummer*">
+            <input name="adresszusatz" type="text" class="form-control" placeholder="Adresszusatz">
+            <input type="submit" class="form-control" value="registrieren" style="background-color: #aea6ff">
+          </form>
+        </div>
+      </div>
+    </div>
+  <br>
+  <br>
+  <br>
+  <i>*Felder m&uuml;ssen ausgef&uuml;llt sein</i>
+}

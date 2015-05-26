@@ -134,24 +134,72 @@ public class DatenbankAdapter implements IDatenbankAdapter{
     /*** IDBKunde ***/
 
     @Override
-    public boolean anmelden(String email, String passwort) throws ServerDown {
+    public List<String> anmelden(String email, String passwort){
 
-        boolean result = false;
+        List<String> result = null;
 
         try{
             Statement stmt = con.createStatement();
-            ResultSet rs   = stmt.executeQuery("SELECT U_ID FROM User WHERE U_Email = '"+email+"' AND  U_Passwort = '"+passwort+"' ;");
+            ResultSet rs   = stmt.executeQuery("SELECT U_ID,U_Email,U_Vorname,U_Nachname,U_GebDatum,U_Ort,U_PLZ,U_Strasse,U_Hausnummer,U_Adresszusatz,U_Typ " +
+                    "FROM User " +
+                    "WHERE U_Email = '"+email+"' AND U_Passwort = '"+passwort+"' ;");
 
             if(rs.next()){
-                result = true;
+
+                result = new ArrayList<>();
+                result.add(rs.getString("U_ID"));
+                result.add(rs.getString("U_Email"));
+                result.add(rs.getString("U_Vorname"));
+                result.add(rs.getString("U_Nachname"));
+                result.add(rs.getString("U_GebDatum"));
+                result.add(rs.getString("U_Ort"));
+                result.add(rs.getString("U_PLZ"));
+                result.add(rs.getString("U_Strasse"));
+                result.add(rs.getString("U_Hausnummer"));
+                result.add(rs.getString("U_Adresszusatz"));
+                result.add(rs.getString("U_Typ"));
+
             }
             rs.close();
 
-        }catch (SQLException ex){
-            throw new ServerDown("Code "+ex.getErrorCode());
-        }
+        }catch (SQLException ex){}
 
         return result;
+    }
+
+    @Override
+    public List<String> getKundenDaten(int kID, String email, String vn, String nn) {
+
+        List<String> result = null;
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet rs   = stmt.executeQuery("SELECT U_ID,U_Email,U_Vorname,U_Nachname,U_GebDatum,U_Ort,U_PLZ,U_Strasse,U_Hausnummer,U_Adresszusatz,U_Typ " +
+                    "FROM User " +
+                    "WHERE U_Email = '"+email+"' AND U_ID = '"+kID+"' AND U_Vorname = '"+vn+"' AND U_Nachname = '"+nn+"' ;");
+
+            if(rs.next()){
+
+                result = new ArrayList<>();
+                result.add(rs.getString("U_ID"));
+                result.add(rs.getString("U_Email"));
+                result.add(rs.getString("U_Vorname"));
+                result.add(rs.getString("U_Nachname"));
+                result.add(rs.getString("U_GebDatum"));
+                result.add(rs.getString("U_Ort"));
+                result.add(rs.getString("U_PLZ"));
+                result.add(rs.getString("U_Strasse"));
+                result.add(rs.getString("U_Hausnummer"));
+                result.add(rs.getString("U_Adresszusatz"));
+                result.add(rs.getString("U_Typ"));
+
+            }
+            rs.close();
+
+        }catch (SQLException ex){}
+
+        return result;
+
     }
 
     @Override
@@ -168,16 +216,65 @@ public class DatenbankAdapter implements IDatenbankAdapter{
             rs.close();
 
         }catch (SQLException ex){
-
+            return -1;
         }
 
         return result;
     }
 
     @Override
-    public boolean registrieren(String email, String passwort, String vn, String nachname, String gebD, int ort, String str, int hn, String adzs) {
+    public boolean registrieren(String email, String passwort, String vn, String nachname, String gebD, String ort, int plz, String str, int hn, String adzs) {
+
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs   = stmt.executeQuery("INSERT INTO User VALUES(" +
+                    "''," +
+                    "'"+email+"'," +
+                    "'"+passwort+"'," +
+                    "'"+vn+"'," +
+                    "'"+nachname+"'," +
+                    "'"+gebD+"'," +
+                    "'"+ort+"'," +
+                    "'"+plz+"'," +
+                    "'"+str+"'," +
+                    "'"+hn+"'," +
+                    "'"+adzs+"'," +
+                    "'');");
 
 
-        return false;
+            rs.close();
+            return true;
+
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean changeProfil(int kID, String email, String vn, String nn, String gebD, String ort, int plz, String str, int hn, String adzs) {
+
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs   = stmt.executeQuery("UPDATE User SET " +
+                    "U_Email = '"+email+"'," +
+                    "U_Vorname = '"+vn+"'," +
+                    "U_Nachname = '"+nn+"'," +
+                    "U_GebDatum = '"+gebD+"'," +
+                    "U_Ort = '"+ort+"'," +
+                    "U_Plz = '"+plz+"'," +
+                    "U_Strasse = '"+str+"'," +
+                    "U_Hausnummer = '"+hn+"'," +
+                    "U_Adresszusatz = '"+adzs+" "+
+                    "WHERE U_ID = '"+kID+"' ;");
+
+
+            rs.close();
+            return true;
+
+
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

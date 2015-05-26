@@ -1,0 +1,35 @@
+@(kundeDTO: KundenVerwaltungKomponente.KundeDTO, message: String)
+
+@main{
+
+  @if(message != null){
+    <center>@Html(message)</center>
+  }else{
+    <center>Bitte f&uuml;llen Sie alle mit * markierte Filder aus</center>
+  }
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Mein Profil
+    </div>
+    <div class="panel-body">
+      <div class="input-group input-group-sm">
+        <form action="@routes.Account.doKundenProfil()" method="post">
+          <input name="email" type="email" class="form-control" placeholder="Email*" value="@kundeDTO.getEmail">
+          <input name="vorname" type="text" class="form-control" placeholder="Vorname*" value="@kundeDTO.getVorname">
+          <input name="nachname" type="text" class="form-control" placeholder="Nachname*" value="@kundeDTO.getNachname">
+          <input name="gebDatum" type="date" class="form-control" placeholder="Geburtsdatum TT.MM.JJJJ*" value="@kundeDTO.getGebDatum">
+          <input name="ort" type="text" class="form-control" placeholder="Ort*" value="@kundeDTO.getOrt">
+          <input name="plz" type="number" class="form-control" placeholder="PLZ*" value="@kundeDTO.getPlz">
+          <input name="strasse" type="text" class="form-control" placeholder="Strasse*" value="@kundeDTO.getStrasse">
+          <input name="hausnummer" type="number" class="form-control" placeholder="Hausnummer*" value="@kundeDTO.getHausnummer">
+          <input name="adresszusatz" type="text" class="form-control" placeholder="Adresszusatz" @kundeDTO.getAdresszusatz>
+          <input type="submit" class="form-control" value="speichern" style="background-color: #aea6ff">
+        </form>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <i>*Felder m&uuml;ssen ausgef&uuml;llt sein</i>
+}

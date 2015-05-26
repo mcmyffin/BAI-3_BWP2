@@ -42,4 +42,63 @@ public class Verlinkung extends Controller{
         return ok(anmelden.render(""));
     }
 
+    public static Result showRegistrieren(){
+        if(Account.checkUserSession()) return showIndex();
+        return ok(registrieren.render(null));
+    }
+
+    /**** ADMIN BEREICH ****/
+    // ADMIN
+    public static Result showAbcAnalyse(){
+        if(Account.checkAdminSession()){
+
+        }else{
+            index.render(null);
+            return redirect("/");
+        }
+        return TODO;
+    }
+
+    // ADMIN
+    public static Result showAccountVerwaltung(){
+        if(Account.checkAdminSession()){
+
+        }else{
+            index.render(null);
+            return redirect("/");
+        }
+        return TODO;
+    }
+
+    // ADMIN
+    public static Result showAddArtikel(){
+        if(Account.checkAdminSession()){
+
+        }else{
+            index.render(null);
+            return redirect("/");
+        }
+        return TODO;
+    }
+
+    public static Result showRemArtikel(){
+        if(Account.checkAdminSession()){
+
+        }else{
+            index.render(null);
+            return redirect("/");
+        }
+        return TODO;
+    }
+
+    public static Result showArtikelBestand(){
+        if(Account.checkAdminSession()){
+
+        }else{
+            index.render(null);
+            return redirect("/");
+        }
+        return TODO;
+    }
+
 }

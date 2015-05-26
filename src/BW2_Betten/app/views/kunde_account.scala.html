@@ -1,10 +1,49 @@
-@(message: String)
+@(kundeDTO: models.KundenVerwaltungKomponente.KundeSessionDTO)
 
 
 @main{
 
+
+
+    @if(kundeDTO != null){
+      <b>Kunde</b><br>
+      <p>Willkommen @kundeDTO.getVorname , @kundeDTO.getNachname</p>
+
+      <br>
+      <h4>Aktionen</h4>
+      <ul>
+        <li>
+          <b>Betellung</b>
+          <ul>
+            <li>
+              <a href="">Meine Bestellungen anzeigen</a>
+            </li>
+            <li>
+              <a href="">Bestellung stornieren</a>
+            </li>
+            <li>
+              <a href="">Administrator kontaktieren</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <b>Accountverwaltung</b>
+          <ul>
+            <li>
+              <a href="@routes.Account.kundeProfil()">Mein Profil</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <br><br>
+
+
+    }else{
+      <center> Uuuups ...</center>
+      <center><b style="color:red"> Es ist ein Fehler aufgetreten, bitte wende dich an den Administrator!</b></center>
+    }
   <form action="/account" method="post">
-    <p>Willkommen @message</p>
     <button>Logout</button>
   </form>
 }

@@ -1,0 +1,51 @@
+@(kundeDTO: models.KundenVerwaltungKomponente.KundeSessionDTO)
+
+
+@main{
+
+
+
+    <b>Administrator</b><br>
+    <p>Willkommen @if(kundeDTO != null){@kundeDTO.getVorname @kundeDTO.getNachname}</p>
+
+    <br>
+    <h4>Aktionen</h4>
+    <ul>
+        <li>
+            <b>Analyse</b>
+            <ul>
+                <li>
+                    <a href="@routes.Verlinkung.showAbcAnalyse()">ABC Analyse durchf&uuml;hren</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Shop</b>
+            <ul>
+                <li>
+                    <a href="@routes.Verlinkung.showAddArtikel()">Artikel hinzuf&uuml;gen</a>
+                </li>
+                <li>
+                    <a href="@routes.Verlinkung.showRemArtikel()">Artikel l&ouml;schen</a>
+                </li>
+                <li>
+                    <a href="">Best&auml;nde pr&uuml;fen</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Accountverwaltung</b>
+            <ul>
+                <li>
+                    <a href="@routes.Account.kundeProfil()">Mein Profil</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <br><br>
+  <form action="/account" method="post">
+    <button>Logout</button>
+  </form>
+}
+
