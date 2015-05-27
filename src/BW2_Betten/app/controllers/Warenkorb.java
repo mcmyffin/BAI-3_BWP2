@@ -79,9 +79,18 @@ public class Warenkorb extends Controller {
         }else if(artForm.get("artikelID") != null){
             String artikelID = artForm.get("artikelID");
             String m = artForm.get("menge");
+
+            int artID = Integer.parseInt(artikelID);
             int menge = Integer.parseInt(m);
-            if(menge <= 0) session().remove(artikelID);
-            else session(artikelID,Integer.toString(menge));
+
+            IProduktKomponente produktKomponente = new ProduktKomponente();
+            IArtikel artikel = produktKomponente.sucheArtikelNachArtikelID(artID);
+
+            // Wenn bestellmenge ueber dem Bestand
+            if(menge <= artikel.getBestand()){
+                if(menge <= 0) session().remove(artikelID);
+                else session(artikelID,Integer.toString(menge));
+            }
         }
 
 

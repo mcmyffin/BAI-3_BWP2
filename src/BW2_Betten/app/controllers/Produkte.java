@@ -22,8 +22,9 @@ public class Produkte extends Controller {
         String begriff = suche.get("suchbegriff");
 
 
+        int admin = (Account.checkAdminSession() ? 1 : 0);
         IProduktKomponente produktKomponente = new ProduktKomponente();
-        if(begriff.isEmpty() || begriff == null) return ok(produkte.render(produktKomponente.getArtikel()));
-        return ok(produkte.render(produktKomponente.sucheArtikelNachBegriff(begriff)));
+        if(begriff == null || begriff.isEmpty()) return ok(produkte.render(produktKomponente.getArtikel(), admin));
+        return ok(produkte.render(produktKomponente.sucheArtikelNachBegriff(begriff),admin));
     }
 }

@@ -1,4 +1,4 @@
-@(suchErgebnis: java.util.List[models.ProduktKomponente.IArtikel])
+@(suchErgebnis: java.util.List[models.ProduktKomponente.IArtikel], admin: Integer)
 @import play.api.Play
 
 @main{
@@ -18,11 +18,17 @@
                 <div class="productPicPos">
                     <img alt="Artikel" src="@routes.Assets.at(artikel.getBildURL)" class="img-thumbnail productPic">
                     <div class="img-thumbnail productBestand">
-                    @if(artikel.getBestand > 0) {
-                        <center style="color: green">Lieferbar</center>
+
+                    @if(admin > 0) {
+                        <center>@artikel.getBestand</center>
                     }else{
+                        @if(artikel.getBestand > 0) {
+                        <center style="color: green">Lieferbar</center>
+                        }else{
                         <center style="color: red">nicht lieferbar</center>
+                        }
                     }
+
                     </div>
                 </div>
 

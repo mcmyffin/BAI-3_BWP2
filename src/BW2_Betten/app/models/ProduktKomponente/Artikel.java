@@ -72,4 +72,22 @@ public class Artikel implements IArtikel {
     public void setBestand(int bestand) {
         this.bestand = bestand;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj == null) return false;
+        if(!(obj instanceof Artikel)) return false;
+
+        Artikel aArtikel = (Artikel) obj;
+
+        if(aArtikel == this) return true;
+
+        return (aArtikel.artID == this.artID);
+    }
 }

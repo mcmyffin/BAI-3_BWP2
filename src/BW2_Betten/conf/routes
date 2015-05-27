@@ -10,6 +10,8 @@ GET         /warenkorb                                controllers.Verlinkung.sho
 GET         /account                                  controllers.Account.showKundeProfil()
 GET         /account/profil                           controllers.Account.kundeProfil()
 GET         /account/registrieren                     controllers.Verlinkung.showRegistrieren()
+##### KASSE #####
+#GET         /kasse                                    controllers.Kasse.showBestelluebersicht()
 
 ##### ADMIN #####
 GET         /account/admin/show/abcAnalyse            controllers.Verlinkung.showAbcAnalyse()
@@ -22,9 +24,12 @@ GET         /account/admin/show/artikelBestand        controllers.Verlinkung.sho
 POST        /account                                  controllers.Account.doAccount()
 POST        /account/registrieren                     controllers.Account.doRegistrieren()
 POST        /account/profil                           controllers.Account.doKundenProfil()
+
 POST        /produkte                                 controllers.Produkte.sucheArtikel()
 POST        /produkte/add                             controllers.Warenkorb.addArtikelToWarenkorb()
+
 POST        /warenkorb                                controllers.Warenkorb.doWarenkorb()
+#POST        /kasse                                    controllers.Kasse.doBestellen()
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -24,7 +24,7 @@ public class Verlinkung extends Controller{
         IProduktKomponente produktKomponente = new ProduktKomponente();
         List<IArtikel> artikelList = produktKomponente.getArtikel();
 
-        return ok(produkte.render(artikelList));
+        return Produkte.sucheArtikel();
     }
 
     public static Result showAngebote(){

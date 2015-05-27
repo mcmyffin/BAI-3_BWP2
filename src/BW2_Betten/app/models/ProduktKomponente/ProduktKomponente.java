@@ -101,20 +101,40 @@ public class ProduktKomponente implements IProduktKomponente{
 
             IArtikel unterartikel = sucheArtikelNachArtikelID(unterartikelIDPaar.getKey());
             if(unterartikel.getTyp().equals(ArtikelTyp.LEVEL_0)){
-                System.out.println("UNTERARTIKEL: "+unterartikel.getBezeichnung()+" | bestand = "+unterartikel.getBestand()+" /  menge = "+unterartikelIDPaar.getValue() +" = ");
 
                 if(unterartikel.getBestand() > 0){
                     return (unterartikel.getBestand())/unterartikelIDPaar.getValue();
                 }else return 0;
 
-
             } else {
-                System.out.println("min("+calculateBestand(unterartikel) +" , "+ bestand+")");
                 return Math.min(calculateBestand(unterartikel), Integer.MAX_VALUE);
             }
         }
-        System.out.println(artikel.getBezeichnung()+" hat keine unterartikel");
         return bestand;
+    }
+
+
+    private List<Pair<Integer,Integer>> getAlleUnterartikelAlsListe(IArtikel artikel){
+
+        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return null;
+
+        List<Pair<Integer,Integer>> result = new ArrayList();
+
+
+        // LEVEL 1
+        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_1)){
+            return getUnterArtikel(artikel);
+        }
+
+        // LEVEL 2
+        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_2)){
+
+            // LEVEL 1 & LEVEL 0
+
+        }
+
+        return null;
+
     }
 
 }
