@@ -1,4 +1,6 @@
-package models.ProduktKomponente;
+package models.ProduktKomponente.Produkt;
+
+import models.ProduktKomponente.DTO.ArtikelSimplelDTO;
 
 /**
  * Created by dima on 13.05.15.
@@ -68,5 +70,8 @@ public interface IArtikel {
     public int getPreis();
 
 
+    public ArtikelSimplelDTO toSimpleDTO();
+
     public void setBestand(int bestand);
+
 }

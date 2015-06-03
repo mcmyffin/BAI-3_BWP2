@@ -1,11 +1,16 @@
 package models.ProduktKomponente;
 
 
+import models.DatenTypen.Pair;
 import models.DatenbankAdapter.DatenbankAdapter;
 import models.DatenbankAdapter.IDBArtikel;
+import models.ProduktKomponente.DTO.ArtikelAdvancedDTO;
+import models.ProduktKomponente.DTO.ArtikelSimplelDTO;
+import models.ProduktKomponente.Produkt.Artikel;
+import models.ProduktKomponente.Produkt.ArtikelTyp;
+import models.ProduktKomponente.Produkt.IArtikel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by dima on 13.05.15.
@@ -19,122 +24,225 @@ public class ProduktKomponente implements IProduktKomponente{
     }
 
 
-
-
     //*** implementierte Interface methoden
 
     @Override
-    public IArtikel sucheArtikelNachArtikelID(int artikelID) {
+    public IArtikel getArtikelByID(int artikelID) {
 
-        return buildArtikel(persistenz.getArtikelByID(artikelID));
+        IArtikel artikel = persistenz.getArtikelByID(artikelID);
+        return artikel;
     }
 
     @Override
-    public List<IArtikel> sucheArtikelNachBegriff(String suchbegriff) {
+    public List<IArtikel> getArtikelByBegriff(String suchbegriff) {
 
-        List<List<String>> artikelListe = persistenz.sucheArtikelNachBegriff(suchbegriff);
-       return buildArtikelList(artikelListe);
+        return persistenz.getArtikelByBegriff(suchbegriff);
     }
 
     @Override
-    public List<IArtikel> getArtikel() {
+    public List<IArtikel> getAlleArtikel() {
 
-        List<List<String>> artikelListe = persistenz.getArtikel();
-        return buildArtikelList(artikelListe);
+        return persistenz.getAlleArtikel();
     }
 
-    private List<IArtikel> buildArtikelList(List<List<String>> artikelListe){
+    @Override
+    public ArtikelSimplelDTO getArtikelByIDAsDTO(int artikelID) {
+        return parseArtikelToArtikelSimple(getArtikelByID(artikelID));
+    }
 
-        List<IArtikel> artikelList = new ArrayList<>();
+    @Override
+    public List<ArtikelSimplelDTO> getArtikelByBegriffAsDTO(String suchbegriff) {
 
-        for(List<String> artikel: artikelListe){
+        return parseArtikelListToArtikelSimpleList(getArtikelByBegriff(suchbegriff));
+    }
 
-            IArtikel art = buildArtikel(artikel);
-            if(art == null) continue;
-            artikelList.add(art);
+    @Override
+    public List<ArtikelSimplelDTO> getAlleArtikelAsDTO() {
+
+        return parseArtikelListToArtikelSimpleList(getAlleArtikel());
+    }
+
+    @Override
+    public ArtikelAdvancedDTO getAdvancedArtikelByID(int artikelID) {
+
+        IArtikel artikel = this.getArtikelByID(artikelID);
+        List<ArtikelAdvancedDTO> unterartikel = this.getUnterArtikelFrom(artikel);
+
+        ArtikelAdvancedDTO advancedDTO = new ArtikelAdvancedDTO(artikel,unterartikel);
+        return advancedDTO;
+    }
+
+    @Override
+    public List<ArtikelAdvancedDTO> getAllAdvancedArtikel() {
+
+        List<IArtikel> alleArtikel = this.getAlleArtikel();
+        List<ArtikelAdvancedDTO> resultList = new LinkedList();
+
+        for(IArtikel artikel : alleArtikel){
+
+            if(artikel == null) continue;
+            List<ArtikelAdvancedDTO> unterartikel = this.getUnterArtikelFrom(artikel);
+            ArtikelAdvancedDTO advancedDTO = new ArtikelAdvancedDTO(artikel,unterartikel);
+            resultList.add(advancedDTO);
         }
 
-        return artikelList;
+        return resultList;
     }
 
-    private IArtikel buildArtikel(List<String> artikel){
 
-        if(artikel.isEmpty()) return null;
+    private List<ArtikelSimplelDTO> parseArtikelListToArtikelSimpleList(List<IArtikel> artikelList){
 
-        int artID = Integer.parseInt(artikel.get(0));
-        String bezeichnung = artikel.get(1);
-        String beschreibung = artikel.get(2);
-        ArtikelKategorie kategorie = ArtikelKategorie.getKategorieByString(artikel.get(3));
-        ArtikelTyp typ = ArtikelTyp.getTypByInt(Integer.parseInt(artikel.get(4)));
-        String bildURL = artikel.get(5);
-        int bestand = Integer.parseInt(artikel.get(6));
-        int preis = Integer.parseInt(artikel.get(7));
+        List<ArtikelSimplelDTO> resultListe = new ArrayList();
 
-        IArtikel einArtikel = new Artikel(artID,bezeichnung,beschreibung,kategorie,typ,bildURL,bestand,preis);
-        System.out.println("Artikel : "+einArtikel.getBezeichnung()+" mit LVL "+einArtikel.getTyp());
-        System.out.println("hat den bestand: "+einArtikel.getBestand());
-        if(einArtikel.getTyp().getValue() != (ArtikelTyp.LEVEL_0.getValue())){
-            System.out.println("->Artikel : " + einArtikel.getBezeichnung() + " geht in die bereichnung");
-            einArtikel.setBestand(calculateBestand(einArtikel));
-            System.out.println("Artikel : " + einArtikel.getBezeichnung()+" hat jetzt den bestand: "+einArtikel.getBestand());
+        for(IArtikel artikel : artikelList){
+
+            ArtikelSimplelDTO simplelDTO = parseArtikelToArtikelSimple(artikel);
+            resultListe.add(simplelDTO);
         }
-        return einArtikel;
+
+        return resultListe;
     }
 
-    private List<Pair<Integer,Integer>> getUnterArtikel(IArtikel artikel){
+    private ArtikelSimplelDTO parseArtikelToArtikelSimple(IArtikel artikel){
 
-        List<Pair<Integer,Integer>> unterartikel = new ArrayList();
-        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return unterartikel;
-        return persistenz.getUnterArtikel(artikel.getArtikelID());
+        ArtikelSimplelDTO simplelDTO = new ArtikelSimplelDTO(artikel);
+        return simplelDTO;
     }
 
-    private List<Pair<Integer,Integer>> getUnterArtikel(int artikelnummer){
-        IArtikel artikel = sucheArtikelNachArtikelID(artikelnummer);
-        return getUnterArtikel(artikel);
+    private List<ArtikelAdvancedDTO> getUnterArtikelFrom(IArtikel artikel){
+
+        List<ArtikelAdvancedDTO> resultList = new ArrayList();
+
+        for(IArtikel einArtikel : getUnterartikel(artikel,new LinkedList<IArtikel>())){
+
+            ArtikelAdvancedDTO advancedDTO = new ArtikelAdvancedDTO(einArtikel,null);
+            resultList.add(advancedDTO);
+        }
+        return resultList;
     }
 
-    private int calculateBestand(IArtikel artikel){
+    /**/
+    private List<IArtikel> getUnterartikel(IArtikel artikel, List<IArtikel> accu){
 
-        int bestand = artikel.getBestand();
+        if(artikel == null) return accu;
+        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return accu;
 
-        for(Pair<Integer,Integer> unterartikelIDPaar : getUnterArtikel(artikel)){
+        List<IArtikel> untermenge = persistenz.getUnterartikelListe(artikel.getArtikelID());
 
-            IArtikel unterartikel = sucheArtikelNachArtikelID(unterartikelIDPaar.getKey());
-            if(unterartikel.getTyp().equals(ArtikelTyp.LEVEL_0)){
+        for(IArtikel einArtikel : untermenge){
 
-                if(unterartikel.getBestand() > 0){
-                    return (unterartikel.getBestand())/unterartikelIDPaar.getValue();
-                }else return 0;
+            getUnterartikel(einArtikel,accu).add(einArtikel);
+        }
 
-            } else {
-                return Math.min(calculateBestand(unterartikel), Integer.MAX_VALUE);
+        return accu;
+    }
+    /**/
+
+
+
+
+    private IArtikel calculateBestand(IArtikel artikel){
+
+        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return artikel;
+
+        Queue<IArtikel> queue = new LinkedList();
+        List<Pair<IArtikel,Integer>> unterartikel = new LinkedList();
+
+        queue.offer(artikel);
+
+        while (!queue.isEmpty()){
+
+            IArtikel einArtikel = queue.poll();
+
+            List<Pair<IArtikel,Integer>> untermenge = persistenz.getUnterArtikelByID(einArtikel.getArtikelID());
+            if(untermenge == null) continue;
+
+            for(Pair<IArtikel,Integer> eineUntermenge : untermenge){
+
+                unterartikel.add(eineUntermenge);
+                queue.offer(eineUntermenge.getKey());
             }
         }
-        return bestand;
-    }
 
+        int bestand = Integer.MAX_VALUE;
 
-    private List<Pair<Integer,Integer>> getAlleUnterartikelAlsListe(IArtikel artikel){
+        for(Pair<IArtikel,Integer> unterartikelPaar : unterartikel){
 
-        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return null;
+            IArtikel einArtikel = unterartikelPaar.getKey();
+            int menge = unterartikelPaar.getValue();
 
-        List<Pair<Integer,Integer>> result = new ArrayList();
+            if(einArtikel.getTyp().equals(ArtikelTyp.LEVEL_0)){
 
+                int tmpBestand = einArtikel.getBestand();
 
-        // LEVEL 1
-        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_1)){
-            return getUnterArtikel(artikel);
+                if(tmpBestand <= 0){
+                    bestand = 0;
+                    break;
+                }
+
+                tmpBestand = (tmpBestand)/(menge);
+                bestand = Math.min(bestand,tmpBestand);
+            }
         }
 
-        // LEVEL 2
-        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_2)){
-
-            // LEVEL 1 & LEVEL 0
-
-        }
-
-        return null;
-
+        artikel.setBestand(bestand);
+        return artikel;
     }
+
+    //    private List<Pair<Integer,Integer>> getUnterArtikel(IArtikel artikel){
+//
+//        List<Pair<Integer,Integer>> unterartikel = new ArrayList();
+//        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return unterartikel;
+//        return persistenz.getUnterArtikel(artikel.getArtikelID());
+//    }
+
+//    private List<Pair<Integer,Integer>> getUnterArtikel(int artikelnummer){
+//        IArtikel artikel = sucheArtikelNachArtikelID(artikelnummer);
+//        return getUnterArtikel(artikel);
+//    }
+
+//    private int calculateBestand(IArtikel artikel){
+//
+//        int bestand = artikel.getBestand();
+//
+//        for(Pair<Integer,Integer> unterartikelIDPaar : getUnterArtikel(artikel)){
+//
+//            IArtikel unterartikel = sucheArtikelNachArtikelID(unterartikelIDPaar.getKey());
+//            if(unterartikel.getTyp().equals(ArtikelTyp.LEVEL_0)){
+//
+//                if(unterartikel.getBestand() > 0){
+//                    return (unterartikel.getBestand())/unterartikelIDPaar.getValue();
+//                }else return 0;
+//
+//            } else {
+//                return Math.min(calculateBestand(unterartikel), Integer.MAX_VALUE);
+//            }
+//        }
+//        return bestand;
+//    }
+
+
+//    private List<Pair<Integer,Integer>> getAlleUnterartikelAlsListe(IArtikel artikel){
+//
+//        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_0)) return null;
+//
+//        List<Pair<Integer,Integer>> result = new ArrayList();
+//
+//
+//        // LEVEL 1
+//        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_1)){
+//            return getUnterArtikel(artikel);
+//        }
+//
+//        // LEVEL 2
+//        if(artikel.getTyp().equals(ArtikelTyp.LEVEL_2)){
+//
+//            // LEVEL 1 & LEVEL 0
+//
+//        }
+//
+//        return null;
+//
+//    }
 
 }

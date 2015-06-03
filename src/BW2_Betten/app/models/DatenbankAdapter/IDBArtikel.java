@@ -1,9 +1,9 @@
 package models.DatenbankAdapter;
 
 
-import models.ProduktKomponente.Pair;
+import models.ProduktKomponente.Produkt.IArtikel;
+import models.DatenTypen.Pair;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public interface IDBArtikel {
      * Gibt alle Artikel aus
      * @return List<List<String>> artikel
      */
-    public List<List<String>> getArtikel();
+    public List<IArtikel> getAlleArtikel();
 
     /**
      * Suche Artikel nach Beriff
@@ -26,23 +26,25 @@ public interface IDBArtikel {
      * @param begriff
      * @return Gibt eine Liste der uebereinstimmungen zurueck, wenn nichts gefunden, dann Liste leer.
      */
-    public List<List<String>> sucheArtikelNachBegriff(String begriff);
+    public List<IArtikel> getArtikelByBegriff(String begriff);
 
     /**
      * Get Artikel By ID
      *
      * Sucht ein Artikel mit genau dieser Artikelnummer.
      * @param artikelnummer
-     * @return Gibt ein Artikel zurueck, wenn gefunden, sonst leere Liste.
+     * @return Gibt ein Artikel zurueck, wenn gefunden, null.
      */
-    public List<String> getArtikelByID(int artikelnummer);
+    public IArtikel getArtikelByID(int artikelnummer);
 
     /**
      * Get Unterartikel
      * Sucht nach Unterartikel wenn vorhanden
      * @param artikelnummer
-     * @return eine Liste mit Pair<ArtikelID,Menge>.
+     * @return eine Liste mit Pair<IArtikel,Menge>.
      *          Wenn keine vorhanden, dann Liste leer.
      */
-    public List<Pair<Integer,Integer>> getUnterArtikel(int artikelnummer);
+    public List<Pair<IArtikel,Integer>> getUnterArtikelByID(int artikelnummer);
+
+    public List<IArtikel> getUnterartikelListe(int artikelnummer);
 }

@@ -1,4 +1,4 @@
-package models.ProduktKomponente;
+package models.ProduktKomponente.Produkt;
 
 /**
  * Created by dima on 13.05.15.

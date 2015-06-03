@@ -1,5 +1,9 @@
 package models.ProduktKomponente;
 
+import models.ProduktKomponente.DTO.ArtikelAdvancedDTO;
+import models.ProduktKomponente.DTO.ArtikelSimplelDTO;
+import models.ProduktKomponente.Produkt.IArtikel;
+
 import java.util.List;
 
 /**
@@ -14,7 +18,9 @@ public interface IProduktKomponente {
      * @param artikelID
      * @return Wenn ein Artikel gefunden, dann wird dieser zurueck gegeben, sonst null.
      */
-    public IArtikel sucheArtikelNachArtikelID(int artikelID);
+    public IArtikel getArtikelByID(int artikelID);
+
+    public ArtikelSimplelDTO getArtikelByIDAsDTO(int artikelID);
 
     /**
      * Suche Artikel nach Begriff
@@ -23,7 +29,16 @@ public interface IProduktKomponente {
      * @param suchbegriff
      * @return Gibt eine Liste der uebereinstimmungen zurueck, wenn nichts gefunden, dann Liste leer.
      */
-    public List<IArtikel> sucheArtikelNachBegriff(String suchbegriff);
+    public List<IArtikel> getArtikelByBegriff(String suchbegriff);
 
-    public List<IArtikel> getArtikel();
+    public List<ArtikelSimplelDTO> getArtikelByBegriffAsDTO(String suchbegriff);
+
+
+    public List<IArtikel> getAlleArtikel();
+
+    public List<ArtikelSimplelDTO> getAlleArtikelAsDTO();
+
+    public ArtikelAdvancedDTO getAdvancedArtikelByID(int artikelID);
+
+    public List<ArtikelAdvancedDTO> getAllAdvancedArtikel();
 }

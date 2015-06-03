@@ -1,4 +1,4 @@
-@(kundeDTO: models.KundenVerwaltungKomponente.KundeSessionDTO)
+@(kundeDTO: models.KundenVerwaltungKomponente.DTO.KundeDTO)
 
 
 @main{
@@ -15,7 +15,7 @@
             <b>Analyse</b>
             <ul>
                 <li>
-                    <a href="@routes.Verlinkung.showAbcAnalyse()">ABC Analyse durchf&uuml;hren</a>
+                    <a href="@routes.Verlinkung.showABC_Analyse()">ABC Analyse durchf&uuml;hren</a>
                 </li>
             </ul>
         </li>
@@ -29,7 +29,7 @@
                     <a href="@routes.Verlinkung.showRemArtikel()">Artikel l&ouml;schen</a>
                 </li>
                 <li>
-                    <a href="">Best&auml;nde pr&uuml;fen</a>
+                    <a href="@routes.Verlinkung.showProduktListe()">Produktliste</a>
                 </li>
             </ul>
         </li>

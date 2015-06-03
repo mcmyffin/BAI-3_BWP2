@@ -1,11 +1,13 @@
-package models.ProduktKomponente;
+package models.ProduktKomponente.DTO;
 
-import models.DatenbankAdapter.Exception.ArtikelDTO_ParseException;
+import models.ProduktKomponente.Produkt.IArtikel;
+
+import java.util.List;
 
 /**
  * Created by dima on 20.05.15.
  */
-public class ArtikelDTO {
+public class ArtikelAdvancedDTO {
 
     private int artID;
     private String bezeichnung;
@@ -14,11 +16,15 @@ public class ArtikelDTO {
     private int typ;
     private String bildURL;
     private int bestand;
-    private int preis;
 
-    public ArtikelDTO(IArtikel artikel) throws ArtikelDTO_ParseException {
-        if(artikel == null) throw new ArtikelDTO_ParseException();
+    private List<ArtikelAdvancedDTO> unterartikelListe;
+
+    public ArtikelAdvancedDTO(IArtikel artikel, List<ArtikelAdvancedDTO> unterartikelListe){
+
+        if(artikel == null) throw new NullPointerException("Artikel darf nicht NULL sein!");
+
         parseArtikelToDTO(artikel);
+        this.unterartikelListe = unterartikelListe;
     }
 
 
@@ -31,24 +37,9 @@ public class ArtikelDTO {
         typ = artikel.getTyp().getValue();
         bildURL = artikel.getBildURL();
         bestand = artikel.getBestand();
-        preis = artikel.getPreis();
     }
 
-    public static IArtikel parseArtikelDTOToArtikel(ArtikelDTO artikelDTO){
 
-        IArtikel artikel = new Artikel(
-                artikelDTO.getArtID(),
-                artikelDTO.getBezeichnung(),
-                artikelDTO.getBeschreibung(),
-                ArtikelKategorie.getKategorieByString(artikelDTO.getKategorie()),
-                ArtikelTyp.getTypByInt(artikelDTO.getTyp()),
-                artikelDTO.getBildURL(),
-                artikelDTO.getBestand(),
-                artikelDTO.getPreis()
-        );
-
-        return artikel;
-    }
 
     public int getArtID() {
         return artID;
@@ -78,7 +69,7 @@ public class ArtikelDTO {
         return bestand;
     }
 
-    public int getPreis() {
-        return preis;
+    public List<ArtikelAdvancedDTO> getUnterartikelListe(){
+        return this.unterartikelListe;
     }
 }

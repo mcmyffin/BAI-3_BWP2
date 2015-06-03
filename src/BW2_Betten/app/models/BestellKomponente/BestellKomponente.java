@@ -1,6 +1,6 @@
 package models.BestellKomponente;
 
-import models.ProduktKomponente.IArtikel;
+import models.ProduktKomponente.Produkt.IArtikel;
 
 import java.util.List;
 

@@ -2,6 +2,14 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.KundenVerwaltungKomponente.*;
+import models.KundenVerwaltungKomponente.Benutzer.IKunde;
+import models.KundenVerwaltungKomponente.Benutzer.KundeRegistrierenResult;
+import models.KundenVerwaltungKomponente.Benutzer.UserTyp;
+import models.KundenVerwaltungKomponente.DTO.KundeDTO;
+import models.KundenVerwaltungKomponente.DTO.KundeSessionDTO;
+import models.KundenVerwaltungKomponente.Exceptions.AnmeldungNichtMoeglichException;
+import models.KundenVerwaltungKomponente.Exceptions.KundeNichtGefundenException;
+import models.KundenVerwaltungKomponente.Exceptions.SessionParseException;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -17,24 +25,35 @@ public class Account extends Controller {
     public static final String USER = "user";
     public static final String TIME = "time";
 
-    public static Result doAnmelden(){
+    private static boolean anmelden(){
 
         DynamicForm anmeldenForm = Form.form().bindFromRequest();
         String email = anmeldenForm.get("email");
         String passwort = anmeldenForm.get("passwort");
 
-        IKundenVerwaltungKomponente kundenverwaltung = new KundenVerwaltungKomponente();
-        IKunde kunde = kundenverwaltung.anmelden(email, passwort);
+        try {
 
-        if(kunde != null){
+            IKundenVerwaltungKomponente kundenverwaltung = new KundenVerwaltungKomponente();
+            IKunde kunde = kundenverwaltung.anmelden(email, passwort);
 
-            KundeSessionDTO kundeSessionDTO = kunde.toSessionDTO();
-            JsonNode jsonNode = Json.toJson(kundeSessionDTO);
-            session(USER, jsonNode.toString());
-            session(TIME,Long.toString(System.currentTimeMillis()));
+            saveKundeToSession(kunde.toSessionDTO());
+            return true;
+
+        } catch (AnmeldungNichtMoeglichException e) {
+
+            doAbmelden();
+            return false;
+        }
+    }
+
+    public static Result doAnmelden(){
+
+        boolean anmeldeErgebnis = anmelden();
+
+        if(anmeldeErgebnis){
             return showKundeProfil();
         }else{
-            return ok(anmelden.render("<b style=\"color:red\">Email oder Passwort falsch</b>"));
+            return ok(anmelden.render("Email oder Passwort falsch"));
         }
     }
 
@@ -51,26 +70,44 @@ public class Account extends Controller {
         String gebDatum = registrierForm.get("gebDatum");
 
         String ort = registrierForm.get("ort");
-        int plz = Integer.parseInt(registrierForm.get("plz"));
+        String plzString = registrierForm.get("plz");
         String str = registrierForm.get("strasse");
-        int hn = Integer.parseInt(registrierForm.get("hn"));
+        String hnString = registrierForm.get("hn");
         String adzs = registrierForm.get("adresszusatz");
 
+        int plz = 0;
+        int hn = 0;
 
+        // preconditions
         if(!passwort1.equals(passwort2)) return ok(registrieren.render("Passw&ouml;rter stimmen nicht &uuml;berein"));
+        if(plzString == null) return ok(registrieren.render("plz darf nicht leer sein!"));
+        if(hnString == null) return ok(registrieren.render("Hausnummer darf nicht leer sein!"));
+
+        try{
+            plz = Integer.parseInt(plzString);
+            hn = Integer.parseInt(hnString);
+        }catch (NumberFormatException e){
+            return ok(registrieren.render("plz & hausnummer m&uumlssen aus Zahlen bestehen!"));
+        }
+
+
         IKundenVerwaltungKomponente kundenverwalter = new KundenVerwaltungKomponente();
 
-        int result = kundenverwalter.registrieren(email, passwort1, vn, nachname, gebDatum, ort, plz, str, hn, adzs);
-        if(result == 0){
-            return ok(registrieren.render("Erfolgreich registriert<br> Sie k&ouml;nnen sich jetzt anmelden"));
-        }else if(result == 1){
-            return ok(registrieren.render("Diese Email-Adresse wird bereits verwendet, bitte nehmen sie eine andere"));
-        }else if(result == 2){
-            return ok(registrieren.render("Passwort zu kurz oder leer"));
-        }else if(result == 3){
-            return ok(registrieren.render("Email ist ung&uuml;ltig oder leer"));
+        KundeRegistrierenResult result = kundenverwalter.registrieren(email, passwort1, vn, nachname, gebDatum, ort, plz, str, hn, adzs);
+        if(result.equals(KundeRegistrierenResult.OK)){
+            return ok(registrieren.render(result.getMessage()));
+        }else if(result.equals(KundeRegistrierenResult.FAIL_EMAIL_VERGEBEN)){
+            return ok(registrieren.render(result.getMessage()));
+        }else if(result.equals(KundeRegistrierenResult.FAIL_EMAIL_FALSCH)){
+            return ok(registrieren.render(result.getMessage()));
+        }else if(result.equals(KundeRegistrierenResult.FAIL_PASSWORT_LEER_UNGUELTIG)){
+            return ok(registrieren.render(result.getMessage()));
+        }else if(result.equals(KundeRegistrierenResult.FAIL_PASSWORT_ZUKURZ)){
+            return ok(registrieren.render(result.getMessage()));
+        }else if(result.equals(KundeRegistrierenResult.ERROR_SERVER)){
+            return ok(registrieren.render(result.getMessage()));
         }else{
-            return ok(registrieren.render("Registrieren zuzeit nicht m&ouml;glich!<br>Bitte versuchen Sie es zu einem sp&auml;teren Zeitpunkt"));
+            return ok(registrieren.render(KundeRegistrierenResult.ERROR_UNDEFINIERT.getMessage()));
         }
     }
 
@@ -78,42 +115,42 @@ public class Account extends Controller {
 
     public static Result doKundenProfil(){
 
-//        JsonNode changedProfil = request().body().asJson();
-        DynamicForm dynamicForm = Form.form().bindFromRequest();
-        IKundenVerwaltungKomponente verwaltung = new KundenVerwaltungKomponente();
-        KundeSessionDTO sessionDTO = Json.fromJson(Json.parse(session(USER)),KundeSessionDTO.class);
-
-        String email = dynamicForm.get("email");
-        String vn    = dynamicForm.get("vorname");
-        String nn    = dynamicForm.get("nachname");
-        String gd    = dynamicForm.get("gebDatum");
-        String ort   = dynamicForm.get("ort");
-        String plz   = dynamicForm.get("plz");
-        String str   = dynamicForm.get("strasse");
-        String hn    = dynamicForm.get("hausnummer");
-        String adzs  = dynamicForm.get("adresszusatz");
-
-        if(
-                email == null || email.isEmpty() ||
-                vn == null || vn.isEmpty() ||
-                nn == null || nn.isEmpty() ||
-                ort == null || ort.isEmpty() ||
-                plz == null || plz.isEmpty() ||
-                str == null || str.isEmpty() ||
-                hn == null || hn.isEmpty()){
-
-            KundeDTO dto = verwaltung.getKundenDaten(sessionDTO);
-            return ok(profil.render(dto,"Eingaben beinhalten leere oder ung&uuml;tige Inhalte"));
-        }
-
-        KundeDTO kundeDTO = new KundeDTO(sessionDTO.getId() ,email,vn,nn,gd,ort,Integer.parseInt(plz),str, Integer.parseInt(hn),adzs);
-        boolean result = verwaltung.changeProfil(kundeDTO);
-
-        if(result){
-            return ok(profil.render(kundeDTO,"Erfolgreich gespeichert!"));
-        }else{
-            return ok(profil.render(kundeDTO,"Hat nicht funktioniert!"));
-        }
+//        DynamicForm dynamicForm = Form.form().bindFromRequest();
+//        IKundenVerwaltungKomponente verwaltung = new KundenVerwaltungKomponente();
+//        KundeSessionDTO sessionDTO = Json.fromJson(Json.parse(session(USER)),KundeSessionDTO.class);
+//
+//        String email = dynamicForm.get("email");
+//        String vn    = dynamicForm.get("vorname");
+//        String nn    = dynamicForm.get("nachname");
+//        String gd    = dynamicForm.get("gebDatum");
+//        String ort   = dynamicForm.get("ort");
+//        String plz   = dynamicForm.get("plz");
+//        String str   = dynamicForm.get("strasse");
+//        String hn    = dynamicForm.get("hausnummer");
+//        String adzs  = dynamicForm.get("adresszusatz");
+//
+//        if(
+//                email == null || email.isEmpty() ||
+//                vn == null || vn.isEmpty() ||
+//                nn == null || nn.isEmpty() ||
+//                ort == null || ort.isEmpty() ||
+//                plz == null || plz.isEmpty() ||
+//                str == null || str.isEmpty() ||
+//                hn == null || hn.isEmpty()){
+//
+//            KundeDTO dto = verwaltung.getKundenDaten(sessionDTO);
+//            return ok(profil.render(dto,"Eingaben beinhalten leere oder ung&uuml;tige Inhalte"));
+//        }
+//
+//        KundeDTO kundeDTO = new KundeDTO(sessionDTO.getId() ,email,vn,nn,gd,ort,Integer.parseInt(plz),str, Integer.parseInt(hn),adzs);
+//        boolean result = verwaltung.changeProfil(kundeDTO);
+//
+//        if(result){
+//            return ok(profil.render(kundeDTO,"Erfolgreich gespeichert!"));
+//        }else{
+//            return ok(profil.render(kundeDTO,"Hat nicht funktioniert!"));
+//        }
+        return TODO;
     }
 
 
@@ -121,33 +158,42 @@ public class Account extends Controller {
 
         // Wenn POST und Angemeldet, dann LOGOUT
         if(checkUserSession()){
-            return doAbmelden();
+            doAbmelden();
+            return ok(anmelden.render(null));
         }else{
             return doAnmelden();
         }
     }
 
-    public static Result doAbmelden(){
+    static void doAbmelden(){
         session().remove(USER);
-        return ok(anmelden.render(null));
+        session().remove(TIME);
     }
 
     public static Result showKundeProfil(){
         if(!checkUserSession()) return ok(anmelden.render(null));
         else{
 
-            String jsonString = session(USER);
-            JsonNode jsonNode = Json.parse(jsonString);
-            KundeSessionDTO kundeSessionDTO = Json.fromJson(jsonNode,KundeSessionDTO.class);
+            KundeSessionDTO sessionDTO = loadKundeFromSession();
+            IKundenVerwaltungKomponente verwaltungKomponente = new KundenVerwaltungKomponente();
+            KundeDTO kundeDTO = null;
 
-            System.out.println("KUNDE json  -> "+jsonNode);
-            System.out.println("KUNDE class -> "+kundeSessionDTO.toString());
+            try {
+                IKunde kunde = verwaltungKomponente.fromKundeSessionDTO(sessionDTO);
+                kundeDTO = kunde.toDTO();
+                saveKundeToSession(kunde.toSessionDTO());
+
+            } catch (SessionParseException|KundeNichtGefundenException e) {
+                doAbmelden();
+                e.getMessage();
+            }
+
             if(checkAdminSession()){
                 // ADMIN
-                return ok(admin_account.render(kundeSessionDTO));
+                return ok(admin_account.render(kundeDTO));
             }else{
                 // USER
-                return ok(kunde_account.render(kundeSessionDTO));
+                return ok(kunde_account.render(kundeDTO));
             }
         }
     }
@@ -157,30 +203,59 @@ public class Account extends Controller {
     }
 
     public static boolean checkAdminSession(){
+
         if(session(USER) != null){
 
-            String jsonString = session(USER);
-            JsonNode jsonNode = Json.parse(jsonString);
-            KundeSessionDTO sessionDTO = Json.fromJson(jsonNode,KundeSessionDTO.class);
+            KundeSessionDTO sessionDTO = loadKundeFromSession();
+            if(sessionDTO == null) return false;
 
             if(sessionDTO.getTyp() == UserTyp.ADMIN.getValue()) return true;
-            else return false;
-        }else{
-            return false;
         }
+
+        return false;
+
     }
 
     public static Result kundeProfil(){
 
         if(!checkUserSession()) return Verlinkung.showAnmelden();
 
-        IKundenVerwaltungKomponente verwaltung = new KundenVerwaltungKomponente();
-        KundeSessionDTO sessionDTO = Json.fromJson(Json.parse(session(USER)),KundeSessionDTO.class);
-        KundeDTO dto = verwaltung.getKundenDaten(sessionDTO);
+        KundeDTO kundeDTO = getIKundeFromSession().toDTO();
 
-        return ok(profil.render(dto,""));
+        return ok(profil.render(kundeDTO,""));
     }
 
-    /**** ADMIN Bereich ****/
 
+    static IKunde getIKundeFromSession(){
+
+        if(!checkUserSession()) return null;
+
+        IKundenVerwaltungKomponente verwaltung = new KundenVerwaltungKomponente();
+        IKunde kunde = null;
+
+        try {
+            kunde = verwaltung.fromKundeSessionDTO(loadKundeFromSession());
+        } catch (SessionParseException|KundeNichtGefundenException e) {
+            e.printStackTrace();
+        }
+        return kunde;
+    }
+
+    private static void saveKundeToSession(KundeSessionDTO sessionDTO){
+
+        JsonNode jsonNode = Json.toJson(sessionDTO);
+        session(USER,jsonNode.toString());
+
+    }
+
+    private static KundeSessionDTO loadKundeFromSession(){
+
+        if(!session().containsKey(USER)) return null;
+
+        String jsonNode_String = session(USER);
+        JsonNode jsonNode = Json.parse(jsonNode_String);
+
+        KundeSessionDTO sessionDTO = Json.fromJson(jsonNode,KundeSessionDTO.class);
+        return sessionDTO;
+    }
 }

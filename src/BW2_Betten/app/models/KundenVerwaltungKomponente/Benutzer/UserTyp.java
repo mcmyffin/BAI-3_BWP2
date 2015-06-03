@@ -1,4 +1,4 @@
-package models.KundenVerwaltungKomponente;
+package models.KundenVerwaltungKomponente.Benutzer;
 
 /**
  * Created by dima on 23.05.15.

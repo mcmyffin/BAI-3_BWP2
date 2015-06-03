@@ -1,5 +1,13 @@
 package models.KundenVerwaltungKomponente;
 
+import models.KundenVerwaltungKomponente.Benutzer.IKunde;
+import models.KundenVerwaltungKomponente.Benutzer.KundeRegistrierenResult;
+import models.KundenVerwaltungKomponente.DTO.KundeDTO;
+import models.KundenVerwaltungKomponente.DTO.KundeSessionDTO;
+import models.KundenVerwaltungKomponente.Exceptions.AnmeldungNichtMoeglichException;
+import models.KundenVerwaltungKomponente.Exceptions.KundeNichtGefundenException;
+import models.KundenVerwaltungKomponente.Exceptions.SessionParseException;
+
 /**
  * Created by dima on 13.05.15.
  */
@@ -12,10 +20,10 @@ public interface IKundenVerwaltungKomponente {
      * @param passwort
      * @return IKunde Objekt wenn anmelden erfolgreich, sont null
      */
-    public IKunde anmelden(String email, String passwort);
+    public IKunde anmelden(String email, String passwort) throws AnmeldungNichtMoeglichException;
 
 
-    public KundeDTO getKundenDaten(KundeSessionDTO sessionDTO);
+    public IKunde getKundenDaten(KundeSessionDTO sessionDTO) throws KundeNichtGefundenException;
 
     /**
      * Registrieren
@@ -43,7 +51,7 @@ public interface IKundenVerwaltungKomponente {
      *
      * @return int-Meldung
      */
-     public int registrieren(String email, String passwort, String vn, String nachname, String gebD, String ort,int plz, String str, int hn, String adzs);
+     public KundeRegistrierenResult registrieren(String email, String passwort, String vn, String nachname, String gebD, String ort,int plz, String str, int hn, String adzs);
 
     /**
      * Change Profil
@@ -51,5 +59,14 @@ public interface IKundenVerwaltungKomponente {
      * @param kundeDTO
      * @return true wenn erfolgreich gespeichert
      */
-    public boolean changeProfil(KundeDTO kundeDTO);
+    public boolean changeProfil(KundeSessionDTO sessionDTO , KundeDTO kundeDTO);
+
+
+    /**
+     * From Kunde Session DTO
+     * Parst den Session DTO zu IKunde
+     * @param kundeSessionDTO
+     * @return IKunde
+     */
+    public IKunde fromKundeSessionDTO(KundeSessionDTO kundeSessionDTO)  throws SessionParseException, KundeNichtGefundenException;
 }

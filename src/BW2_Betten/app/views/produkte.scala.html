@@ -1,5 +1,5 @@
-@(suchErgebnis: java.util.List[models.ProduktKomponente.IArtikel], admin: Integer)
-@import play.api.Play
+@(suchErgebnis: java.util.List[models.ProduktKomponente.DTO.ArtikelSimplelDTO], admin: Integer)
+
 
 @main{
 
@@ -34,17 +34,18 @@
 
                 <div class="productInfo img-thumbnail">
                     <b>@artikel.getBezeichnung</b><br>
-                    <i>Artikelnummer: @artikel.getArtikelID</i><br>
+                    <i>Artikelnummer: @artikel.getArtID</i><br>
                     @Html(artikel.getBeschreibung)
                 </div>
 
                 <form action="/produkte/add" method="post">
+                    <input type="hidden" name="@WarenkorbPersistenz.WARENKORB_ACTION_NAME" value="@WarenkorbPersistenz.WARENKORB_ACTION_ARTIKEL_ADD">
                     <div class="productHinzufuegenUndPreis">
                         <div class="img-thumbnail productPreis">
                             <center><b>@artikel.getPreis &euro;</b></center>
                         </div>
                         @if(artikel.getBestand > 0){
-                            <button type="submit" class="glyphicon glyphicon-plus pruductHinzufuegen"  name="artikelNummer" value="@artikel.getArtikelID"></button>
+                            <button type="submit" class="glyphicon glyphicon-plus pruductHinzufuegen"  name="artikelNummer" value="@artikel.getArtID"></button>
                         }else{
                             <button type="button" class="glyphicon glyphicon-plus pruductHinzufuegen"  name="artikelNummer" disabled></button>
                         }

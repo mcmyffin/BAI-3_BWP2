@@ -1,0 +1,39 @@
+@(aObjekte : java.util.List[models.ProduktKomponente.DTO.ArtikelSimplelDTO], bObjekte : java.util.List[models.ProduktKomponente.DTO.ArtikelSimplelDTO], cObjekte : java.util.List[models.ProduktKomponente.DTO.ArtikelSimplelDTO])
+
+@main{
+
+
+  <b style="color: #204d74"> A-Produkte 80%</b>
+  <ul>
+      @for(aObjekt <- aObjekte){
+
+        <li>
+          <u>Artikelnummer: @aObjekt.getArtID | @aObjekt.getBezeichnung</u>
+        </li>
+
+      }
+  </ul>
+
+  <b style="color: #204d74"> B-Produkte 15%</b>
+  <ul>
+      @for(bObjekt <- bObjekte){
+
+        <li>
+          <u>Artikelnummer: @bObjekt.getArtID | @bObjekt.getBezeichnung</u>
+        </li>
+
+      }
+  </ul>
+
+  <b style="color: #204d74"> C-Produkte  5%</b>
+  <ul>
+      @for(cObjekt <- cObjekte){
+
+        <li>
+          <u>Artikelnummer: @cObjekt.getArtID | @cObjekt.getBezeichnung</u>
+        </li>
+
+      }
+  </ul>
+
+}
