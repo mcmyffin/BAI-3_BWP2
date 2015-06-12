@@ -1,4 +1,4 @@
-package models.ProduktKomponente;
+package models.ProduktKomponente.Produkt;
 
 /**
  * Created by dima on 13.05.15.
@@ -27,8 +27,4 @@ public enum ArtikelTyp {
         else return LEVEL_0;
     }
 
-    @Override
-    public String toString() {
-        return this.getValue()+"";
-    }
 }

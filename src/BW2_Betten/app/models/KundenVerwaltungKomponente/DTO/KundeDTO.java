@@ -1,4 +1,4 @@
-package models.KundenVerwaltungKomponente;
+package models.KundenVerwaltungKomponente.DTO;
 
 /**
  * Created by dima on 23.05.15.
@@ -68,45 +68,5 @@ public class KundeDTO {
 
     public String getAdresszusatz() {
         return adresszusatz;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
-
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
-    }
-
-    public void setGebDatum(String gebDatum) {
-        this.gebDatum = gebDatum;
-    }
-
-    public void setOrt(String ort) {
-        this.ort = ort;
-    }
-
-    public void setPlz(int plz) {
-        this.plz = plz;
-    }
-
-    public void setStrasse(String strasse) {
-        this.strasse = strasse;
-    }
-
-    public void setHausnummer(int hausnummer) {
-        this.hausnummer = hausnummer;
-    }
-
-    public void setAdresszusatz(String adresszusatz) {
-        this.adresszusatz = adresszusatz;
     }
 }

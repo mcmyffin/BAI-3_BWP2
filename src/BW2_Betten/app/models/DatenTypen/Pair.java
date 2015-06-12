@@ -1,4 +1,4 @@
-package models.ProduktKomponente;
+package models.DatenTypen;
 
 /**
  * Created by dima on 21.05.15.

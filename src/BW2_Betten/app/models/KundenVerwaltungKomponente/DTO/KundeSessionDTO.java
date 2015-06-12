@@ -1,4 +1,4 @@
-package models.KundenVerwaltungKomponente;
+package models.KundenVerwaltungKomponente.DTO;
 
 /**
  * Created by dima on 23.05.15.
@@ -12,13 +12,15 @@ public class KundeSessionDTO {
 
     private int typ;
 
-//    public KundeSessionDTO(int id, String email, String vorname, String nachname, int typ) {
-//        this.id = id;
-//        this.email = email;
-//        this.vorname = vorname;
-//        this.nachname = nachname;
-//        this.typ = typ;
-//    }
+    public KundeSessionDTO(){}
+
+    public KundeSessionDTO(int id, String email, String vorname, String nachname, int typ) {
+        this.id = id;
+        this.email = email;
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.typ = typ;
+    }
 
     public int getId() {
         return id;
@@ -61,14 +63,4 @@ public class KundeSessionDTO {
         this.typ = typ;
     }
 
-    @Override
-    public String toString() {
-        return "KundeSessionDTO{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", vorname='" + vorname + '\'' +
-                ", nachname='" + nachname + '\'' +
-                ", typ=" + typ +
-                '}';
-    }
 }

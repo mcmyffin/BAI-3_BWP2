@@ -3,7 +3,11 @@
 @main{
 
 
-        <p>index</p>
+        @if(message != null){
+                @message
+        }else{
+                <p>index</p>
+        }
 
 
 }

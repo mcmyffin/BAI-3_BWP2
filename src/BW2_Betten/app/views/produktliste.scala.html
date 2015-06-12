@@ -1,0 +1,26 @@
+@(artikelListe: java.util.List[models.ProduktKomponente.DTO.ArtikelAdvancedDTO])
+
+@main{
+
+  @if(artikelListe != null){
+
+    @for(artikel <- artikelListe){
+
+      <b style="color:#204d74">ArtNummer: @artikel.getArtID | @artikel.getBezeichnung</b>
+      <ul>
+        @if(artikel.getUnterartikelListe != null){
+
+          @for(unterartikel <- artikel.getUnterartikelListe){
+            <li>
+              <u>ArtikelNummer: @unterartikel.getArtID | @unterartikel.getBezeichnung</u>
+            </li>
+          }
+        }
+      </ul>
+    }
+
+  }else{
+
+    <center><b> Keine Artikel gefunden </b></center>
+  }
+}

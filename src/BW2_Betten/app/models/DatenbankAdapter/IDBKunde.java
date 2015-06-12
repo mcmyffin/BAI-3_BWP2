@@ -1,8 +1,6 @@
 package models.DatenbankAdapter;
 
-import models.DatenbankAdapter.Exception.ServerDown;
-
-import java.util.List;
+import models.KundenVerwaltungKomponente.Benutzer.IKunde;
 
 /**
  * Created by dima on 20.05.15.
@@ -16,10 +14,11 @@ public interface IDBKunde {
      * @param passwort
      * @return true, wenn indetifizierung erfolgreich war
      */
-    public List<String> anmelden(String email, String passwort);
+    public IKunde anmelden(String email, String passwort);
 
 
-    public List<String> getKundenDaten(int kID, String email, String vn, String nn);
+    public IKunde getKundeByID(int kID);
+
     /**
      * Get Kunden ID by Email
      * Versucht die Kundennummer der zugehoerigen Email zu finden

@@ -1,25 +1,27 @@
-@(warenkorb: models.WarenkorbKomponente.WarenkorbDTO)
-@import models.ProduktKomponente;
+@(warenkorb: models.WarenkorbKomponente.DTO.WarenkorbDTO)
+
 @main{
 
-    @if(warenkorb != null){
+    @if(warenkorb != null && warenkorb.getArtikelListe.size() != 0){
 
         <div class="jumbotron warenkorbContainer">
 
 
-        @for(artikelDTO <- warenkorb.getWarenkorb.keySet()){
+        @for(artikelDTO <- warenkorb.getArtikelListe){
 
             <div class="warenkorbUebersicht img-thumbnail">
                 <b>@artikelDTO.getBezeichnung</b><br>
                 <i>Art Nr.: @artikelDTO.getArtID</i>
 
                 <form action="/warenkorb" method="post">
-                    <button name="delete" value="@artikelDTO.getArtID" type="submit" class="glyphicon glyphicon-trash warenkorbDelArtikel"></button>
+                    <input type="hidden" name="@WarenkorbPersistenz.WARENKORB_ACTION_NAME" value="@WarenkorbPersistenz.WARENKORB_ACTION_ARTIKEL_REMOVE">
+                    <button name="artikelNummer" value="@artikelDTO.getArtID" type="submit" class="glyphicon glyphicon-trash warenkorbDelArtikel"></button>
                 </form>
 
                 <form action="/warenkorb" method="post">
-                    <input name="menge" type="number" class="warenkorbMenge" value="@warenkorb.getWarenkorb.get(artikelDTO)">
-                    <input name="artikelID" type="hidden" value="@artikelDTO.getArtID">
+                    <input type="hidden" name="@WarenkorbPersistenz.WARENKORB_ACTION_NAME" value="@WarenkorbPersistenz.WARENKORB_ACTION_ARTIKEL_REFRESH">
+                    <input name="menge" type="number" class="warenkorbMenge" value="@warenkorb.getArtikelMengeByID(artikelDTO.getArtID)">
+                    <input name="artikelNummer" type="hidden" value="@artikelDTO.getArtID">
                 </form>
                 <div class="img-thumbnail warenkorbPreis">
                     <center><b> @artikelDTO.getPreis &euro; </b></center>
@@ -32,10 +34,12 @@
         <!----------------------------------------->
         <b>Gesamt Preis inkl. Mwst betr&auml;gt: </b>
         <div class="warenkorbGesamtPreis img-thumbnail">
-            <center><b> @warenkorb.calculatePreis() &euro;</b></center>
+            <center><b> @warenkorb.getGesamtpreis() &euro;</b></center>
         </div>
         <div class="warenkorbKasse">
-            <a href="" class="btn btn-primary btn-sm">zu Kasse</a>
+            <form action="@routes.Verlinkung.doBestellen()" method="post">
+                <input type="submit" class="btn btn-primary btn-sm" value="Bestellen">
+            </form>
         </div>
 
     }else{
