@@ -146,4 +146,9 @@ public class Verlinkung extends Controller{
         return ok(abcAnalyse.render(aObjekte, bObjekte, cObjekte));
     }
 
+    public static Result showAssAnalyse(){
+
+        return ok(assAnalyse.render());
+    }
+
 }

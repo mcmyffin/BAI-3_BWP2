@@ -3,34 +3,35 @@
 # ~~~~
 
 # GET routes
-GET         /                                         controllers.Verlinkung.showIndex()
-GET         /produkte                                 controllers.Verlinkung.showProdukte()
-GET         /angebote                                 controllers.Verlinkung.showAngebote()
-GET         /warenkorb                                controllers.Verlinkung.showWarenkorb()
-GET         /account                                  controllers.Account.showKundeProfil()
-GET         /account/profil                           controllers.Account.kundeProfil()
-GET         /account/registrieren                     controllers.Verlinkung.showRegistrieren()
+GET         /                                       controllers.Verlinkung.showIndex()
+GET         /produkte                               controllers.Verlinkung.showProdukte()
+GET         /angebote                               controllers.Verlinkung.showAngebote()
+GET         /warenkorb                              controllers.Verlinkung.showWarenkorb()
+GET         /account                                controllers.Account.showKundeProfil()
+GET         /account/profil                         controllers.Account.kundeProfil()
+GET         /account/registrieren                   controllers.Verlinkung.showRegistrieren()
 ##### KASSE #####
 #GET         /kasse                                    controllers.Kasse.showBestelluebersicht()
 
 ##### ADMIN #####
-GET         /account/admin/show/abcAnalyse            controllers.Verlinkung.showABC_Analyse()
-GET         /account/admin/show/addArtikel            controllers.Verlinkung.showAddArtikel()
-GET         /account/admin/show/remArtikel            controllers.Verlinkung.showRemArtikel()
-GET         /account/admin/show/produktListe          controllers.Verlinkung.showProduktListe()
+GET         /account/admin/show/abcAnalyse          controllers.Verlinkung.showABC_Analyse()
+GET         /account/admin/show/addArtikel          controllers.Verlinkung.showAddArtikel()
+GET         /account/admin/show/remArtikel          controllers.Verlinkung.showRemArtikel()
+GET         /account/admin/show/produktListe        controllers.Verlinkung.showProduktListe()
+GET         /account/admin/show/assAnalyse          controllers.Verlinkung.showAssAnalyse()
 #################
 
 # POST routes
-POST        /account                                  controllers.Account.doAccount()
-POST        /account/registrieren                     controllers.Account.doRegistrieren()
-POST        /account/profil                           controllers.Account.doKundenProfil()
+POST        /account                                controllers.Account.doAccount()
+POST        /account/registrieren                   controllers.Account.doRegistrieren()
+POST        /account/profil                         controllers.Account.doKundenProfil()
 
-POST        /produkte                                 controllers.Produkte.sucheArtikel()
-POST        /produkte/add                             controllers.Produkte.addArtikel()
+POST        /produkte                               controllers.Produkte.sucheArtikel()
+POST        /produkte/add                           controllers.Produkte.addArtikel()
 
-POST        /warenkorb                                controllers.WarenkorbPersistenz.doWarenkorb()
-POST        /bestellen                                controllers.Verlinkung.doBestellen()
+POST        /warenkorb                              controllers.WarenkorbPersistenz.doWarenkorb()
+POST        /bestellen                              controllers.Verlinkung.doBestellen()
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                             controllers.Assets.at(path="/public", file)
+GET         /assets/*file                           controllers.Assets.at(path="/public", file)

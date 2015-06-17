@@ -37,6 +37,6 @@ public class AssoziationAnalyse {
 
 
 
-        Logger.debug(aehnlicheBestellungen.toString());
+//        Logger.debug(aehnlicheBestellungen.toString());
     }
 }
