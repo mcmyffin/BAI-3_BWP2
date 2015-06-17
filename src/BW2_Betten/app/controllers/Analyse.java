@@ -1,5 +1,7 @@
 package controllers;
 
+import models.Analyse.AssoziationAnalyse;
+import models.Analyse.AssoziationAnalyseDTO;
 import models.DatenTypen.Pair;
 import models.DatenbankAdapter.DatenbankAdapter;
 import models.DatenbankAdapter.IAnalyse;
@@ -94,6 +96,13 @@ public class Analyse {
         analyseResult.add(bObjekte);
         analyseResult.add(cObjekte);
 
+        AssoziationAnalyse aa = new AssoziationAnalyse();
+        aa.doAssoziationsAnalyse();
+
         return analyseResult;
+    }
+
+    static AssoziationAnalyseDTO doAssoziationAnalyse(){
+        return null;
     }
 }

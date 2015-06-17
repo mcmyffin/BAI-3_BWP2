@@ -43,7 +43,9 @@ public class Account extends Controller {
 
             doAbmelden();
             return false;
+
         }
+
     }
 
     public static Result doAnmelden(){

@@ -109,7 +109,7 @@ public class WarenkorbPersistenz extends Controller {
         if(actionResult){
             return Verlinkung.showWarenkorb();
         }else{
-            return internalServerError("UUPS es ist etwas schief gegangen!");
+            return Verlinkung.showWarenkorb();
         }
     }
 

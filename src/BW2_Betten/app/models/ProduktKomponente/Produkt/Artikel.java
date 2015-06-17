@@ -112,12 +112,10 @@ public class Artikel implements IArtikel {
     public boolean equals(Object obj) {
 
         if(obj == null) return false;
+        if(obj == this) return true;
         if(!(obj instanceof Artikel)) return false;
 
         Artikel aArtikel = (Artikel) obj;
-
-        if(aArtikel == this) return true;
-
         return (aArtikel.artID == this.artID);
     }
 

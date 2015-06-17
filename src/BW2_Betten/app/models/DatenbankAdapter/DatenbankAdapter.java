@@ -15,10 +15,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -481,5 +478,62 @@ public class DatenbankAdapter implements IDatenbankAdapter{
         }
 
         return verkaufteArtikel;
+    }
+
+    @Override
+    public List<Set<IArtikel>> getBestellungenMitMinZweiArtikeln() {
+
+        List<Set<IArtikel>> bestellungen = new LinkedList();
+        String stmtStr = "SELECT BEST_BestellID FROM Bestellliste GROUP BY BEST_BestellID HAVING COUNT(BEST_BestellID) > 1";
+
+        try{
+
+            Statement stmt = con.createStatement();
+            ResultSet rs   = stmt.executeQuery(stmtStr);
+
+            while(rs.next()){
+
+                int bestID = rs.getInt("BEST_BestellID");
+                Set<IArtikel> bestellteArtikel = getArtikelByBestellID(bestID);
+
+                bestellungen.add(bestellteArtikel);
+            }
+
+            rs.close();
+            stmt.close();
+            con.close();
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return bestellungen;
+    }
+
+    private Set<IArtikel> getArtikelByBestellID(int bestellID){
+
+        Set<IArtikel> bestellteArtikel = new LinkedHashSet();
+        String stmtStr = "SELECT BEST_ArtikelID FROM Bestellliste WHERE BEST_BestellID = '14' GROUP BY BEST_ArtikelID";
+
+        try{
+
+            Statement stmt = con.createStatement();
+            ResultSet rs   = stmt.executeQuery(stmtStr);
+
+            while(rs.next()){
+
+                int artID = rs.getInt("BEST_ArtikelID");
+                IArtikel artikel = getArtikelByID(artID);
+
+                if(artikel != null){
+                    bestellteArtikel.add(artikel);
+                }
+            }
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return bestellteArtikel;
     }
 }
